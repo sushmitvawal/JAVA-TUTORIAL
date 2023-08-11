@@ -1,0 +1,126 @@
+Query1:
+
+SELECT sa1.store_id, sa1.store_name,(sa1.total_store_sales_amount / sa2.total_sales) * 100 AS percentage_sales FROM ( SELECT store_id,store_name,EXTRACT(YEAR FROM date) AS year,EXTRACT(MONTH FROM date) AS month,SUM(weekly_sales_amount) AS monthly_sales_amount FROM store_app GROUP BY store_id, store_name, year, month ) sa1 JOIN ( SELECT store_id, EXTRACT(YEAR FROM date) AS year, SUM(weekly_sales_amount) AS total_yearly_sales FROM store_app
+WHERE store_name = 'Bandra'   GROUP BY store_id, year ) sa2 ON sa1.store_id = sa2.store_id AND sa1.year = sa2.year 
+WHERE sa1.store_name = 'Bandra' ORDER BY sa1.store_id, sa1.year, sa1.month;
+
+
+
+
+Qurey2:
+SELECT sa1.store_id, sa1.store_name, sa1.year,sa1.month,(sa1.monthly_sales_amount / sa2.total_yearly_sales) * 100 AS percentage_sales FROM ( SELECT store_id,store_name,EXTRACT(YEAR FROM date) AS year,EXTRACT(MONTH FROM date) AS month,SUM(weekly_sales_amount) AS monthly_sales_amount FROM store_app GROUP BY store_id, store_name, year, month ) sa1 JOIN ( SELECT store_id, EXTRACT(YEAR FROM date) AS year, SUM(weekly_sales_amount) AS total_yearly_sales FROM store_app
+WHERE store_name = 'Bandra'   GROUP BY store_id, year ) sa2 ON sa1.store_id = sa2.store_id AND sa1.year = sa2.year 
+WHERE sa1.store_name = 'Bandra' ORDER BY sa1.store_id, sa1.year, sa1.month;
+
+
+
+Check docker version
+docker -v OR docker --version
+
+Get a docker image(pull)
+docker pull <image name>
+eg. docker pull mysql
+
+
+Get a docker image for a specific tag(version)
+docker pull <image name>:<tag>
+eg. docker pull openjdk:18
+
+
+View all images
+docker images
+
+View/Search a specific image(search)
+docker search <image name>
+docker search mysql
+
+View all running dockers(ps)
+docker ps
+
+View all running and exited dockers(ps -a)
+docker ps -a
+
+Run an image(Start a container) (run)
+docker run <image name> OR docker run <image id>
+docker run mysql
+
+Start a container in detached mode(-d/--detach)
+docker run -d <image name> OR docker run -d <image id>
+docker run -d python
+
+Start a container and give a name(--name)
+docker run --name <name> <image name> OR docker run --name <name> <image id>
+docker run --name pythonContainer 3a5her7392fdf4
+
+Start a container in an interactive mode(-it) (with this -it the docker will not exit and remain running and it will be visible just by running 'docker ps')
+docker run -it <image id>      {not writing seperatly for name and id from now on}
+common eg: docker run --name pythonContainer -it -d 3a5her7392fdf4
+
+
+To exec a command inside docker container(exec)
+docker exec -it <container id> <command>
+eg. docker exec -it 9agsd83h26f9sf python3
+This will start python3 on cmd and you can just type 
+print("Hi python3") and "Hi python3" will be printed
+So basically you can write a code after this
+
+
+To inspect our container/to get all info about the container(inspect)
+docker inspect <container id/name>
+
+To set env variable (-e)
+docker run --name mySQLContainer -e MYSQL_ROOT_PASSWORD= root123 -it -d 3a5her7392fdf4 OR docker run --name mySQLContainer -e MYSQL_ROOT_PASSWORD= root123 -it -d mysql:latest(tag is optional)
+
+To set port number (-p)
+docker run --name nginxServer -it -d -p 8080:80 3a5her7392fdf4 OR docker run --name nginxServer -it -d -p 8080:80 nginx (here 8080:80 means 8080= host machine port 80= container port)
+
+To stop a container(stop)(not visible in docker ps but visible in docker ps -a)
+docker stop <name/id/partial id> OR docker stop  <id1> <id2> ...
+docker stop mysql/3a5as83yu391/3a5
+
+
+
+To remove a container(rm) (not visible in docker ps -a)
+docker rm  <id1> <id2> ...
+
+To remove images(rmi: i for image)
+docker rmi <name/id/partial id>
+
+docker prune command(prune)
+docker system prune [OPTIONS]
+OPTIONS:
+--all , -a		Remove all unused images not just dangling ones
+--filter		Provide filter values (e.g. label=<key>=<value>)
+--force , -f		Do not prompt for confirmation
+--volumes		Prune volumes
+
+
+To restart a container(restart)
+docker restart <name/id>
+
+to login to hub(login)
+docker login
+
+to save the image(commit)
+docker commit
+
+to push our img to hub(login)
+docker push
+
+to copy a file from docker to a local system
+docker copy
+
+to check logs
+docker logs
+
+if you want your docker image to store data (volume)
+docker volume
+
+to logout from hub
+docker hub
+
+Create a network(network create)
+docker network create sprinboot-mysql-net
+
+View list of networks
+docker network ls
