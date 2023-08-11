@@ -1,0 +1,906 @@
+OOPS Concept:
+Inheritance:
+Inheritance in Java is a mechanism in which one object acquires all the properties and behaviours of a parent object.
+The idea behind inheritance in Java is that you can create new classes that are built upon existing classes
+When you inherit from an existing class, you can reuse methods and fields of the parent class. Moreover, you can add new methods and fields in your current class also.
+Inheritance represents the IS-A relationship which is also known as a parent-child relationship.
+We are using extends keyword to achieve inheritance
+A class which is inherited is called a parent or superclass, and the new class is called child or subclass.
+Advantages:   For method overriding (To achieve Runtime polymorphism)
+                          For code reusability
+Example1:   
+ class Employee{  
+ 	float salary=40000;  
+ }  
+ class Programmer extends Employee{  
+ 	int bonus=10000;  
+      	public static void main(String args[]){  
+      		Programmer p=new Programmer();  
+      		System.out.println("Programmer salary is:"+p.salary);  
+     		System.out.println("Bonus of Programmer is:"+p.bonus);  
+}  
+} 
+OUTPUT: 
+	Programmer salary is:40000.0
+ 	Bonus of programmer is:10000
+
+     Example2:
+class Animal{  
+void eat(){System.out.println("eating...");}  
+     }  
+class Dog extends Animal{  
+void bark(){System.out.println("barking...");}  
+}  
+class TestInheritance{  
+public static void main(String args[]){  
+Dog d=new Dog();  
+d.bark();  
+d.eat();  
+}
+      }  
+
+OUTPUT:
+barking...
+eating...
+
+
+
+Types of inheritance
+
+
+
+Why multiple inheritance is not supported in java?
+To reduce the complexity and simplify the language, multiple inheritance is not supported in java.
+Consider a scenario where A, B, and C are three classes. The C class inherits A and B classes. If A and B classes have the same method and you call it from child class object, there will be ambiguity to call the method of A or B class.
+Since compile-time errors are better than runtime errors, Java renders compile-time error if you inherit 2 classes, So whether you have same method or different, there will be compile time error.
+
+Encapsulation:
+Encapsulation in Java is a process of wrapping code and data together into a single unit
+We can create a fully encapsulated class in Java by making all the data members of the class private. Now we can use setter and getter methods to set and get the data in it.
+The Java Bean class is the example of a fully encapsulated class.
+Advantages: It provides you the control over the data
+It is a way to achieve data hiding
+By providing only a setter or getter method, you can make the class read-only or write-only
+The encapsulate class is easy to test
+Example:
+File: Student.java
+//A Java class which is a fully encapsulated class.  
+//It has a private data member and getter and setter methods.  
+package com.javatpoint;  
+public class Student{  
+//private data member  
+private String name;  
+//getter method for name  
+public String getName(){  
+return name;  
+}  
+//setter method for name  
+public void setName(String name){  
+this.name=name  
+}  
+}  
+File: Test.java
+//A Java class to test the encapsulated class.  
+package com.javatpoint;  
+class Test{  
+public static void main(String[] args){  
+//creating instance of the encapsulated class  
+Student s=new Student();  
+//setting value in the name member  
+s.setName("vijay");  
+//getting value of the name member  
+System.out.println(s.getName());  
+}  
+}  
+Output:
+vijay
+
+Read-Only class
+//A Java class which has only getter methods.  
+public class Student{  
+//private data member  
+private String college="AKG";  
+//getter method for college  
+public String getCollege(){  
+return college;  
+}  
+}  
+Now, you can't change the value of the college data member which is "AKG".
+1.s.setCollege("KITE");//will render compile time error  
+Write-Only class
+//A Java class which has only setter methods.  
+public class Student{  
+//private data member  
+private String college;  
+//getter method for college  
+public void setCollege(String college){  
+this.college=college;  
+}  
+}
+
+Polymorphism:
+Polymorphism in Java is a concept by which we can perform a single action in different ways. The word "poly" means many and "morphs" means forms,So polymorphism means many forms.
+There are two types of polymorphism in Java: compile-time polymorphism and runtime polymorphism. We can perform polymorphism in java by method overloading and method overriding.
+Upcasting:If the reference variable of Parent class refers to the object of Child class, it is known as upcasting. For example:
+class A{}  
+class B extends A{}  
+A a=new B();//upcasting  
+Runtime Polymorphism:
+class Bike{  
+  	void run(){System.out.println("running");}  
+}  
+class Splendor extends Bike{  
+  	void run(){System.out.println("running safely with 60km");}  
+  
+  public static void main(String args[]){  
+   	 Bike b = new Splendor();//upcasting  
+   	 b.run();  
+  	}  
+}
+Compile time Polymorphism:
+class Adder{  
+static int add(int a,int b){return a+b;}  
+static int add(int a,int b,int c){return a+b+c;}  
+}  
+class TestOverloading1{  
+public static void main(String[] args){  
+System.out.println(Adder.add(11,11));  
+System.out.println(Adder.add(11,11,11));  
+}
+No.	Method Overloading	Method Overriding
+1)	Method overloading is used to increase the readability of the program.	Method overriding is used to provide the specific implementation of the method that is already provided by its super class.
+2)	Method overloading is performed within class.	Method overriding occurs in two classes that have IS-A (inheritance) relationship.
+3)	In case of method overloading, parameter must be different.	In case of method overriding, parameter must be same.
+4)	Method overloading is the example of compile time polymorphism.	Method overriding is the example of run time polymorphism.
+5)	In java, method overloading can't be performed by changing return type of the method only. Return type can be same or different in method overloading. But you must have to change the parameter.	Return type must be same or covariant in method overriding.
+
+A list of differences between method overloading and method overriding are given below:
+ 
+
+Abstraction:
+Abstraction is a process of hiding the implementation details and showing only functionality to the user.
+There are two ways to achieve abstraction in java
+1.Abstract class (0 to 100%)
+2.Interface (100%)
+Abstract Class:
+ A class which is declared as abstract is known as an abstract class.
+ It can have abstract and non-abstract methods. 
+ It needs to be extended and its method implemented. 
+ It cannot be instantiated.
+abstract class Shape{  
+abstract void draw();  
+}  
+//In real scenario, implementation is provided by others i.e. unknown by end user  
+class Rectangle extends Shape{  
+void draw(){System.out.println("drawing rectangle");}  
+}  
+class Circle1 extends Shape{  
+void draw(){System.out.println("drawing circle");}  
+}  
+//In real scenario, method is called by programmer or user  
+class TestAbstraction1{  
+public static void main(String args[]){  
+Shape s=new Circle1();//In a real scenario, object is provided through method, e.g., getShape() method  
+s.draw();  
+}  
+}  
+Output:
+
+drawing circle
+
+Interface:
+The interface in Java is mechanism to achieve abstraction. There can be      only abstract methods in the Java interface, not method body. 
+
+It is used to achieve abstraction and multiple inheritance.
+It can be used to achieve loose coupling.
+Java Interface also represents the IS-A relationship.
+It cannot be instantiated just like the abstract class.
+Since Java 8, we can have default and static methods in an interface.
+Since Java 9, we can have private methods in an interface.
+interface printable{  
+void print();  
+}  
+class A6 implements printable{  
+public void print(){System.out.println("Hello");}  
+  
+public static void main(String args[]){  
+A6 obj = new A6();  
+obj.print();  
+ }  
+}  
+Output:
+Hello
+Differences between abstract class and interface that are given below.
+Abstract class	Interface
+1) Abstract class can have abstract and non-abstract methods.	Interface can have only abstract methods. Since Java 8, it can have default and static methods also.
+2) Abstract class doesn't support multiple inheritance.	Interface supports multiple inheritance.
+3) Abstract class can have final, non-final, static and non-static variables.	Interface has only static and final variables.
+4) Abstract class can provide the implementation of interface.	Interface can't provide the implementation of abstract class.
+5) The abstract keyword is used to declare abstract class.	The interface keyword is used to declare interface.
+6) An abstract class can extend another Java class and implement multiple Java interfaces.	An interface can extend another Java interface only.
+7) An abstract class can be extended using keyword "extends".	An interface can be implemented using keyword "implements".
+8) A Java abstract class can have class members like private, protected, etc.	Members of a Java interface are public by default.
+9)Example:
+public abstract class Shape{
+public abstract void draw();
+}	Example:
+public interface Drawable{
+void draw();
+}
+
+
+Exception Handling:
+The Exception Handling in Java is one of the powerful mechanism to handle the runtime errors so that normal flow of the application can be maintained
+Exception is an abnormal condition.
+Suppose there are 10 statements in your program and there occurs an exception at statement 5, the rest of the code will not be executed i.e. statement 6 to 10 will not be executed. If we perform exception handling, the rest of the statement will be executed. That is why we use exception handling in Java. 
+The java.lang.Throwable class is the root class of Java Exception hierarchy which is inherited by two subclasses: Exception and Error. A hierarchy of Java Exception classes are given below:
+
+
+
+Example:
+public class JavaExceptionExample{  
+  public static void main(String args[]){  
+   try{  
+      //code that may raise exception  
+      int data=100/0;  
+   }catch(ArithmeticException e){System.out.println(e);}  
+   //rest code of the program   
+   System.out.println("rest of the code...");  
+  }  
+}  
+
+Output:
+Exception in thread main java.lang.ArithmeticException:/ by zero
+rest of the code...
+
+There are 5 keywords which are used in handling exceptions in Java.
+Keyword	Description
+try	The "try" keyword is used to specify a block where we should place exception code. The try block must be followed by either catch or finally. It means, we can't use try block alone.
+catch	The "catch" block is used to handle the exception. It must be preceded by try block which means we can't use catch block alone. It can be followed by finally block later.
+Finally	The "finally" block is used to execute the important code of the program. It is executed whether an exception is handled or not.
+Throw	The "throw" keyword is used to throw an exception.
+Throws	The "throws" keyword is used to declare exceptions. It doesn't throw an exception. It specifies that there may occur an exception in the method. It is always used with method signature.
+
+Difference between Checked and Unchecked Exceptions
+
+Checked Exception	Unchecked Exception
+Checked exceptions occur at compile time.	Unchecked exceptions occur at runtime.
+The compiler checks a checked exception.	The compiler does not check these types of exceptions.
+These types of exceptions can be handled at the time of compilation.	These types of exceptions cannot be a catch or handle at the time of compilation, because they get generated by the mistakes in the program.
+They are the sub-class of the exception class.	They are runtime exceptions and hence are not a part of the Exception class.
+Here, the JVM needs the exception to catch and handle.	Here, the JVM does not require the exception to catch and handle.
+Examples of Checked exceptions:
+
+File Not Found Exception
+No Such Field Exception
+Interrupted Exception
+No Such Method Exception
+Class Not Found Exception	Examples of Unchecked Exceptions:
+
+No Such Element Exception
+Undeclared Throwable Exception
+Empty Stack Exception
+Arithmetic Exception
+Null Pointer Exception
+Array Index Out of Bounds Exception
+Security Exception
+
+Difference between Error and Exception
+Sr. No.	Key	Error	Exception
+1	Type 	Classified as an unchecked type 	Classified as checked and unchecked 
+2	Package 	It belongs to java.lang.error 	It belongs to java.lang.Exception 
+3	Recoverable/ Irrecoverable	It is irrecoverable	It is recoverable
+4 	 	It can't be occur at compile time 	It can occur at run time compile time both 
+5	Example	OutOfMemoryError ,IOError 	NullPointerException , SqlException 
+
+
+Multithreading:
+Multithreading in Java is a process of executing multiple threads simultaneously.
+A thread is a lightweight sub-process, the smallest unit of processing. Multiprocessing and multithreading, both are used to achieve multitasking.
+However, we use multithreading than multiprocessing because threads use a shared memory area. They don't allocate separate memory area so saves memory, and context-switching between the threads takes less time than process.
+Java Multithreading is mostly used in games, animation, etc.
+Advantages:
+It doesn't block the user because threads are independent and you can perform multiple operations at the same time.
+You can perform many operations together, so it saves time.
+Threads are independent, so it doesn't affect other threads if an exception occurs in a single thread
+A thread is a lightweight subprocess, the smallest unit of processing. It is a separate path of execution.
+A thread is a lightweight subprocess, the smallest unit of processing. It is a separate path of execution
+Thread scheduler in java is the part of the JVM that decides which thread should run
+There is no guarantee that which runnable thread will be chosen to run by the thread scheduler
+Only one thread at a time can run in a single process.
+
+There are two ways to create a thread:
+By extending Thread class
+class Multi extends Thread{  
+public void run(){  
+System.out.println("thread is running...");  
+}  
+public static void main(String args[]){  
+Multi t1=new Multi();  
+t1.start();  
+ }  
+}  
+
+      Output:thread is running...
+
+
+    By implementing Runnable interface.
+class Multi3 implements Runnable{  
+public void run(){  
+System.out.println("thread is running...");  
+}  
+  
+public static void main(String args[]){  
+Multi3 m1=new Multi3();  
+Thread t1 =new Thread(m1);  
+t1.start();  
+ }  
+}  
+Output:thread is running...
+
+Methods of thread:
+1.public void run(): is used to perform action for a thread.
+2.public void start(): starts the execution of the thread.JVM calls the run() method on the thread.
+3.public void sleep(long miliseconds): Causes the currently executing thread to sleep (temporarily cease execution) for the specified number of milliseconds.
+4.public void join(): waits for a thread to die.
+5.public void join(long miliseconds): waits for a thread to die for the specified miliseconds.
+6.public int getPriority(): returns the priority of the thread.
+7.public int setPriority(int priority): changes the priority of the thread.
+8.public String getName(): returns the name of the thread.
+9.public void setName(String name): changes the name of the thread.
+10.public Thread currentThread(): returns the reference of currently executing thread.
+11.public int getId(): returns the id of the thread.
+12.public Thread.State getState(): returns the state of the thread.
+13.public boolean isAlive(): tests if the thread is alive.
+14.public void yield(): causes the currently executing thread object to temporarily pause and allow other threads to execute.
+15.public void suspend(): is used to suspend the thread(depricated).
+16.public void resume(): is used to resume the suspended thread(depricated).
+17.public void stop(): is used to stop the thread(depricated).
+18.public boolean isDaemon(): tests if the thread is a daemon thread.
+19.public void setDaemon(boolean b): marks the thread as daemon or user thread.
+20.public void interrupt(): interrupts the thread.
+21.public boolean isInterrupted(): tests if the thread has been interrupted.
+22.public static boolean interrupted(): tests if the current thread has been interrupted.
+
+Life Cycle Of Thread:
+A thread can be in one of the five states. According to sun, there is only 4 states in thread life cycle in java new, runnable, non-runnable and terminated. There is no running state.
+The life cycle of the thread in java is controlled by JVM.
+1) New
+The thread is in new state if you create an instance of Thread class but before the invocation of start() method.
+2) Runnable
+The thread is in runnable state after invocation of start() method, but the thread scheduler has not selected it to be the running thread.
+3) Running
+The thread is in running state if the thread scheduler has selected it.
+4) Non-Runnable (Blocked)
+This is the state when the thread is still alive, but is currently not eligible to run.
+5) Terminated
+A thread is in terminated or dead state when its run() method exits.
+
+
+Collections:
+The Collection in Java is a framework that provides an architecture to store and manipulate the group of objects.
+Java Collections can achieve all the operations that you perform on a data such as searching, sorting, insertion, manipulation, and deletion.
+Java Collection means a single unit of objects. Java Collection framework provides many interfaces (Set, List, Queue, Deque) and classes (ArrayList, Vector, LinkedList, PriorityQueue, HashSet, LinkedHashSet, TreeSet).
+The java.util package contains all the classes and interfaces for the Collection framework.
+
+Blue: Interfaces and Green: Classes
+
+
+
+
+No.	ArrayList	Vector
+1)	ArrayList is not synchronized.	Vector is synchronized.
+2)	ArrayList is not a legacy class.	Vector is a legacy class.
+3)	ArrayList increases its size by 50% of the array size.	Vector increases its size by doubling the array size.
+4)	ArrayList is not ?thread-safe? as it is not synchronized.	Vector list is ?thread-safe? as it?s every method is synchronized.
+
+
+
+No.	ArrayList	LinkedList
+1)	ArrayList uses a dynamic array.	LinkedList uses a doubly linked list.
+2)	ArrayList is not efficient for manipulation because too much is required.	LinkedList is efficient for manipulation.
+3)	ArrayList is better to store and fetch data.	LinkedList is better to manipulate data.
+4)	ArrayList provides random access.	LinkedList does not provide random access.
+5)	ArrayList takes less memory overhead as it stores only object	LinkedList takes more memory overhead, as it stores the object as well as the address of that object.
+
+
+No.	Iterator	ListIterator
+1)	The Iterator traverses the elements in the forward direction only.	ListIterator traverses the elements in backward and forward directions both.
+2)	The Iterator can be used in List, Set, and Queue.	ListIterator can be used in List only.
+3)	The Iterator can only perform remove operation while traversing the collection.	ListIterator can perform ?add,? ?remove,? and ?set? operation while traversing the collection.
+
+
+
+
+No.	Iterator	Enumeration
+1)	The Iterator can traverse legacy and non-legacy elements.	Enumeration can traverse only legacy elements.
+2)	The Iterator is fail-fast.	Enumeration is not fail-fast.
+3)	The Iterator is slower than Enumeration.	Enumeration is faster than Iterator.
+4)	The Iterator can perform remove operation while traversing the collection.	The Enumeration can perform only traverse operation on the collection.
+
+
+
+
+No.	HashMap	Hashtable
+1)	HashMap is not synchronized.	Hashtable is synchronized.
+2)	HashMap can contain one null key and multiple null values.	Hashtable cannot contain any null key or null value.
+3)	HashMap is not ?thread-safe,? so it is useful for non-threaded applications.	Hashtable is thread-safe, and it can be shared between various threads.
+4)	4) HashMap inherits the AbstractMap class	Hashtable inherits the Dictionary class.
+
+
+
+No.	Comparable	Comparator
+1)	Comparable provides only one sort of sequence.	The Comparator provides multiple sorts of sequences.
+2)	It provides one method named compareTo().	It provides one method named compare().
+3)	It is found in java.lang package.	It is located in java.util package.
+4)	If we implement the Comparable interface, The actual class is modified.	The actual class is not changed.
+
+
+List and Set
+The List and Set both extend the collection interface. However, there are some differences between the both which are listed below.
+oThe List can contain duplicate elements whereas Set includes unique items.
+oThe List is an ordered collection which maintains the insertion order whereas Set is an unordered collection which does not preserve the insertion order.
+oThe List interface contains a single legacy class which is Vector class whereas Set interface does not have any legacy class.
+oThe List interface can allow n number of null values whereas Set interface only allows a single null value.
+
+HashSet and Treeset
+
+The HashSet and TreeSet, both classes, implement Set interface. The differences between the both are listed below.
+oHashSet maintains no order whereas TreeSet maintains ascending order.
+oHashSet impended by hash table whereas TreeSet implemented by a Tree structure.
+oHashSet performs faster than TreeSet.
+oHashSet is backed by HashMap whereas TreeSet is backed by TreeMap.
+
+Set and Map
+
+The differences between the Set and Map are given below.
+oSet contains values only whereas Map contains key and values both.
+oSet contains unique values whereas Map can contain unique Keys with duplicate values.
+oSet holds a single number of null value whereas Map can include a single null key with n number of null values.
+
+HashSet and HashMap
+
+The differences between the HashSet and HashMap are listed below.
+oHashSet contains only values whereas HashMap includes the entry (key, value). HashSet can be iterated, but HashMap needs to convert into Set to be iterated.
+oHashSet implements Set interface whereas HashMap implements the Map interface
+oHashSet cannot have any duplicate value whereas HashMap can contain duplicate values with unique keys.
+oHashSet contains the only single number of null value whereas HashMap can hold a single null key with n number of null values.
+
+HashMap and TreeMap
+
+The differences between the HashMap and TreeMap are given below.
+oHashMap maintains no order, but TreeMap maintains ascending order.
+oHashMap is implemented by hash table whereas TreeMap is implemented by a Tree structure.
+oHashMap can be sorted by Key or value whereas TreeMap can be sorted by Key.
+oHashMap may contain a null key with multiple null values whereas TreeMap cannot hold a null key but can have multiple null values.
+
+Collection and Collections:
+The differences between the Collection and Collections are given below.
+oThe Collection is an interface whereas Collections is a class.
+oThe Collection interface provides the standard functionality of data structure to List, Set, and Queue. However, Collections class is to sort and synchronize the collection elements.
+oThe Collection interface provides the methods that can be used for data structure whereas Collections class provides the static methods which can be used for various operation on a collection.
+
+HashCode():
+The hashCode() method returns a hash code value (an integer number).
+The hashCode() method returns the same integer number if two keys (by calling equals() method) are identical.
+However, it is possible that two hash code numbers can have different or the same keys.
+If two objects do not produce an equal result by using the equals() method, then the hashcode() method will provide the different integer result for both the objects.
+
+Equals():
+The equals method is used to check whether two objects are the same or not. It needs to be overridden if we want to check the objects based on the property.
+For example, Employee is a class that has 3 data members: id, name, and salary. However, we want to check the equality of employee object by the salary. Then, we need to override the equals() method.
+
+Arrays and ArrayList:
+The main differences between the Array and ArrayList are given below.
+SN	Array	ArrayList
+1	The Array is of fixed size, means we cannot resize the array as per need.	ArrayList is not of the fixed size we can change the size dynamically.
+2	Arrays are of the static type.	ArrayList is of dynamic size.
+3	Arrays can store primitive data types as well as objects.	ArrayList cannot store the primitive data types it can only store the objects.
+
+
+The length of an array can be obtained using the property of length whereas ArrayList does not support length property, but we can use size() method to get the number of objects in the list.
+Finding the length of the array
+Int [] array = new int[4];  
+System.out.println("The size of the array is " + array.length);  
+          
+Finding the size of the ArrayList
+ArrayList<String> list=new ArrayList<String>();    
+list.add("ankit");    
+list.add("nippun");  
+System.out.println(list.size());           
+
+We can convert an Array to ArrayList by using the asList() method of Arrays class. asList() method is the static method of Arrays class and accepts the List object. Consider the following syntax:
+Arrays.asList(item)  
+We can convert an ArrayList to Array using toArray() method of the ArrayList class. Consider the following syntax to convert the ArrayList to the List object.
+List_object.toArray(new String[List_object.size()])  
+
+Final Finally Finalize:
+A list of differences between final, finally and finalize are given below:
+No.	final	finally	finalize
+1)	Final is used to apply restrictions on class, method and variable. Final class can't be inherited, final method can't be overridden and final variable value can't be changed.	Finally is used to place important code, it will be executed whether exception is handled or not.	Finalize is used to perform clean up processing just before object is garbage collected.
+2)	Final is a keyword.	Finally is a block.	Finalize is a method.
+
+String and String Buffer:
+A list of differences between String and StringBuffer are given below:
+No.	String	StringBuffer
+1)	String class is immutable.	StringBuffer class is mutable.
+2)	String is slow and consumes more memory when you concat too many strings because every time it creates new instance.	StringBuffer is fast and consumes less memory when you cancat strings.
+3)	String class overrides the equals() method of Object class. So you can compare the contents of two strings by equals() method.	StringBuffer class doesn't override the equals() method of Object class.
+String Buffer and String Builder:
+A list of differences between StringBuffer and StringBuilder are given below:
+
+No.	StringBuffer	StringBuilder
+1)	StringBuffer is synchronized i.e. thread safe. It means two threads can't call the methods of StringBuffer simultaneously.	StringBuilder is non-synchronized i.e. not thread safe. It means two threads can call the methods of StringBuilder simultaneously.
+2)	StringBuffer is less efficient than StringBuilder.	StringBuilder is more efficient than StringBuffer.
+
+JVM, JRE and JDK: 
+
+
+JVM (Java Virtual Machine) is an abstract machine. It is called a virtual machine because it doesn't physically exist. It is a specification that provides a runtime environment in which Java bytecode can be executed. It can also run those programs which are written in other languages and compiled to Java bytecode.
+JRE is an acronym for Java Runtime Environment. It is also written as Java RTE. The Java Runtime Environment is a set of software tools which are used for developing Java applications. It is used to provide the runtime environment. It is the implementation of JVM. It physically exists. It contains a set of libraries + other files that JVM uses at runtime.
+JDK is an acronym for Java Development Kit. The Java Development Kit (JDK) is a software development environment which is used to develop Java applications and applets. It physically exists. It contains JRE + development tools.
+
+Access Modifiers: 
+Private: The access level of a private modifier is only within the class. It cannot be accessed from outside the class.
+Default: The access level of a default modifier is only within the package. It cannot be accessed from outside the package. If you do not specify any access level, it will be the default.
+Protected: The access level of a protected modifier is within the package and outside the package through child class. If you do not make the child class, it cannot be accessed from outside the package.
+Public: The access level of a public modifier is everywhere. It can be accessed from within the class, outside the class, within the package and outside the package.
+
+Singleton:
+Singleton Pattern says that just " define a class that has only one instance and provides a global point of access to it".
+In other words, a class must ensure that only single instance should be created and single object can be used by all other classes.
+There are two forms of singleton design pattern
+oEarly Instantiation: creation of instance at load time.
+oLazy Instantiation: creation of instance when required.
+Advantage: Saves memory because object is not created at each request. Only single instance is reused again and again.
+Singleton pattern is mostly used in multi-threaded and database applications. It is used in logging, caching, thread pools, configuration settings etc.
+To create the singleton class, we need to have static member of class, private constructor and static factory method.
+Static member: It gets memory only once because of static, itcontains the instance of the Singleton class.
+Private constructor: It will prevent to instantiate the Singleton class from outside the class.
+Static factory method: This provides the global point of access to the Singleton object and returns the instance to the caller.
+Early Instantiation:
+
+In such case, we create the instance of the class at the time of declaring the static data member, so instance of the class is created at the time of class loading.
+class A{  
+private static A obj=new A();//Early, instance will be created at load time  
+private A(){}  
+
+public static A getA(){  
+return obj;  
+}  
+
+public void doSomething(){  
+//write your code  
+} 
+ 
+}  
+
+Lazy Instantiation:
+In such case, we create the instance of the class in synchronized method or synchronized block, so instance of the class is created when required.
+class A{  
+ private static A obj;  
+ private A(){}  
+   
+ public static A getA(){  
+   if (obj == null){  
+      synchronized(Singleton.class){  
+        if (obj == null){  
+            obj = new Singleton();//instance will be created at request time  
+        }  
+    }              
+    }  
+  return obj;  
+ }  
+  
+ public void doSomething(){  
+ //write your code  
+ }  
+}  
+
+Java 8 features: 
+
+forEach() method:
+Java provides a new method forEach() to iterate the elements. It is defined in Iterable and Stream interfaces.
+It is a default method defined in the Iterable interface. Collection classes which extends Iterable interface can use forEach() method to iterate elements.
+This method takes a single parameter which is a functional interface. So, you can pass lambda expression as an argument.
+For example :
+Default and static methods:
+Java provides a facility to create default methods inside the interface. Methods which are defined inside the interface and tagged with default keyword are known as default methods. These methods are non-abstract methods and can have method body.
+Example:
+interface Sayable{  
+// Default method   
+default void say(){  
+System.out.println("Hello, this is default method");  
+}  
+// Abstract method  
+void sayMore(String msg);  
+}  
+public class DefaultMethods implements Sayable{  
+public void sayMore(String msg){        // implementing abstract method   
+System.out.println(msg);  
+}  
+public static void main(String[] args) {  
+DefaultMethods dm = new DefaultMethods();  
+dm.say();   // calling default method  
+dm.sayMore("Work is worship");  // calling abstract method  
+
+}  
+} 
+	Output:
+Hello, this is default method
+Work is worship
+
+Lamda Expression:
+Lambda expression helps us to write our code in functional style. It provides a clear and concise way to implement SAM interface(Single Abstract Method) by using an expression. It is very useful in collection library in which it helps to iterate, filter and extract data.
+Example:
+interface Drawable{  
+    public void draw();  
+}  
+public class LambdaExpressionExample {  
+    public static void main(String[] args) {  
+        int width=10;  
+  
+        //without lambda, Drawable implementation using anonymous class  
+        Drawable d=new Drawable(){  
+            public void draw(){System.out.println("Drawing "+width);}  
+        };  
+        d.draw();  
+    }  
+}  
+
+Output:
+Drawing 10
+
+
+
+Functional Interface:
+An Interface that contains only one abstract method is known as functional interface. It can have any number of default and static methods. It can also declare methods of object class.
+Functional interfaces are also known as Single Abstract Method Interfaces (SAM Interfaces).
+	Example:
+@FunctionalInterface  
+interface sayable{  
+    void say(String msg);  
+}  
+public class FunctionalInterfaceExample implements sayable{  
+    public void say(String msg){  
+        System.out.println(msg);  
+    }  
+    public static void main(String[] args) {  
+        FunctionalInterfaceExample fie = new FunctionalInterfaceExample();  
+        fie.say("Hello there");  
+    }  
+}
+Output:
+      Hello there
+
+Optional:
+Java introduced a new class Optional in Java 8. It is a public final class which is used to deal with NullPointerException in Java application. We must import java.util package to use this class. It provides methods to check the presence of value for particular variable.
+Example:
+import java.util.Optional;  
+public class OptionalExample {  
+    public static void main(String[] args) {  
+        String[] str = new String[10];        
+        str[5] = "JAVA OPTIONAL CLASS EXAMPLE";// Setting value for 5th index  
+        Optional<String> checkNull = Optional.ofNullable(str[5]);  
+        if(checkNull.isPresent()){  // It Checks, value is present or not  
+            String lowercaseString = str[5].toLowerCase();  
+            System.out.print(lowercaseString);  
+        }else  
+            System.out.println("String value is not present");  
+    }  
+}
+
+Date/Time Api:
+Java has introduced a new Date and Time API since Java 8. The java.time package contains Java 8 Date and Time classes.
+Example:
+import java.time.LocalDate;  
+public class LocalDateExample1 {  
+  public static void main(String[] args) {  
+    LocalDate date = LocalDate.now();  
+    LocalDate yesterday = date.minusDays(1);  
+    LocalDate tomorrow = yesterday.plusDays(2);  
+    System.out.println("Today date: "+date);  
+    System.out.println("Yesterday date: "+yesterday);  
+    System.out.println("Tommorow date: "+tomorrow);  
+  }  
+}
+
+Stream Api:
+The Stream API is used to process collections of objects
+You can use stream to filter, collect, print, and convert from one data structure to other etc.
+Example:
+import java.util.stream.*;  
+public class JavaStreamExample {  
+    public static void main(String[] args){  
+        Stream.iterate(1, element->element+1)  
+        .filter(element->element%5==0)  
+        .limit(5)  
+        .forEach(System.out::println);  
+    }  
+}
+Output:
+5
+10
+15
+20
+25
+
+
+Java 11 features: 
+Running Java File with Single Command:
+One major change is that you don’t need to compile the java source file with javac tool first. You can directly run the file with java command and it implicitly compiles.
+New utility method in String Class:
+isBlank() – This instance method returns a boolean value. Empty Strings and Strings with only white spaces are treated as blank.
+import java.util.*; public class Main { public static void main(String[] args) throws Exception { // Your code here! System.out.println(" ".isBlank()); //true String s = "Anupam"; System.out.println(s.isBlank()); //false String s1 = ""; System.out.println(s1.isBlank()); //true } }
+lines()-This method returns a stream of strings, which is a collection of all substrings split by lines.
+import java.util.stream.Collectors; public class Main { public static void main(String[] args) throws Exception { String str = "JD\nJD\nJD"; System.out.println(str); System.out.println(str.lines().collect(Collectors.toList())); } }
+	Output: 
+Reading/Writing String to and from the File:
+Java 11 strives to make reading and writing of String convenient.
+It has introduced the following methods for reading and writing to/from the files:
+readString()
+writeString()
+Following code showcases an example of this
+Path path = Files.writeString(Files.createTempFile("test", ".txt"), "This was posted on JD");
+System.out.println(path);
+String s = Files.readString(path);
+System.out.println(s); //This was posted on JD
+
+This and Super Keyword: 
+super keyword is used to access methods of the parent class while this is used to access methods of the current class
+So both are constructor calls. Constructor must always be the first statement. So we can not have two statements as first statement, hence either we can call super() or we can call this() from the constructor, but not both.
+
+Call by reference and call by value in java: 
+Java uses only call by value
+There is only call by value in java, not call by reference. If we call a method passing a value, it is known as call by value. The changes being done in the called method, is not affected in the calling method
+In case of call by value original value is not changed. Let's take a simple example:
+class Operation{  
+ int data=50;  
+  
+ void change(int data){  
+ data=data+100;//changes will be in the local variable only  
+ }  
+     
+ public static void main(String args[]){  
+   Operation op=new Operation();  
+  
+   System.out.println("before change "+op.data);  
+   op.change(500);  
+   System.out.println("after change "+op.data);  
+  
+ }  
+}  
+Output:before change 50
+       after change 50	
+In case of call by reference original value is changed if we made changes in the called method. If we pass object in place of any primitive value, original value will be changed. In this example we are passing object as a value. Let's take a simple example:
+class Operation2{  
+ int data=50;  
+  
+ void change(Operation2 op){  
+ op.data=op.data+100;//changes will be in the instance variable  
+ }  
+     
+    
+ public static void main(String args[]){  
+   Operation2 op=new Operation2();  
+  
+   System.out.println("before change "+op.data);  
+   op.change(op);//passing object  
+   System.out.println("after change "+op.data);  
+  
+ }  
+      }  
+    Output:before change 50
+       after change 150
+
+AutoBoxing and UnBoxing in java: 
+The automatic conversion of primitive data types into its equivalent Wrapper type is known as boxing and opposite operation is known as unboxing. 
+AutoBoxing:  Converting a primitive value into an object of the corresponding wrapper class is called autoboxing. For example, converting int to Integer class.
+class BoxingExample1{  
+  public static void main(String args[]){  
+    int a=50;  
+        Integer a2=new Integer(a);//Boxing  
+  
+        Integer a3=5;//Boxing  
+          
+        System.out.println(a2+" "+a3);  
+ }   
+}
+
+   Output:50 5
+
+
+UnBoxing: Converting an object of a wrapper type to its corresponding primitive value is called unboxing. For example conversion of Integer to int.
+
+class UnboxingExample1{  
+  public static void main(String args[]){  
+    Integer i=new Integer(50);  
+        int a=i;  
+          
+        System.out.println(a);  
+ }   
+}  
+Output:
+     50
+
+
+Concurrent Hashmap: 
+HashMap is the Class which is under Traditional Collection and ConcurrentHashMap is a Class which is under Concurrent Collections, apart from this there are various differences between them which are:
+HashMap is non-Synchronized in nature i.e. HashMap is not Thread-safe whereas ConcurrentHashMap is Thread-safe in nature.
+HashMap performance is relatively high because it is non-synchronized in nature and any number of threads can perform simultaneously. But ConcurrentHashMap performance is low sometimes because sometimes Threads are required to wait on ConcurrentHashMap.
+While one thread is Iterating the HashMap object, if other thread try to add/modify the contents of Object then we will get Run-time exception saying ConcurrentModificationException.Whereas In ConcurrentHashMap we wont get any exception while performing any modification at the time of Iteration.
+Using HashMap
+
+
+Synchronized: 
+Synchronization in java is the capability to control the access of multiple threads to any shared resource.
+Java Synchronization is better option where we want to allow only one thread to access the shared resource.
+The synchronization is mainly used to
+1.To prevent thread interference.
+2.To prevent consistency problem.
+There are two types of synchronization
+1.Process Synchronization
+2.Thread Synchronization
+
+Immutable class: 
+ Immutable class means that once an object is created, we cannot change its content.
+There are many immutable classes like String, Boolean, Byte, Short, Integer, Long, Float, Double etc. In short, all the wrapper classes and String class is immutable. We can also create immutable class by creating final class that have final data members as the example given below:
+In this example, we have created a final class named Employee. It have one final datamember, a parameterized constructor and getter method.
+public final class Employee{  
+final String pancardNumber;  
+  
+public Employee(String pancardNumber){  
+this.pancardNumber=pancardNumber;  
+}  
+  
+public String getPancardNumber(){  
+return pancardNumber;  
+}  
+  
+}  
+The above class is immutable because:
+oThe instance variable of the class is final i.e. we cannot change the value of it after creating an object.
+oThe class is final so we cannot create the subclass.
+oThere is no setter methods i.e. we have no option to change the value of the instance variable.
+These points makes this class as immutable.
+
+Immutable String: 
+In java, string objects are immutable. Immutable simply means unmodifiable or unchangeable.
+Once string object is created its data or state can't be changed but a new string object is created.
+class Testimmutablestring{  
+ public static void main(String args[]){  
+   String s="Sachin";  
+   s.concat(" Tendulkar");//concat() method appends the string at the end  
+   System.out.println(s);//will print Sachin because strings are immutable objects  
+ }  
+}  
+  Output:Sachin
+Main Method : 
+The main() is the starting point for JVM to start execution of a Java program. Without the main() method, JVM will not execute the program. The syntax of the main() method is:
+
+public: It is an access specifier. We should use a public keyword before the main() method so that JVM can identify the execution point of the program. If we use private, protected, and default before the main() method, it will not be visible to JVM.
+static: You can make a method static by using the keyword static. We should call the main() method without creating an object. Static methods are the method which invokes without creating the objects, so we do not need any object to call the main() method.
+void: In Java, every method has the return type. Void keyword acknowledges the compiler that main() method does not return any value.
+main(): It is a default signature which is predefined in the JVM. It is called by JVM to execute a program line by line and end the execution after completion of this method. We can also overload the main() method.
+String args[]: The main() method also accepts some data from the user. It accepts a group of strings, which is called a string array. It is used to hold the command line arguments in the form of string values.
+1.main(String args[])  
+Here, agrs[] is the array name, and it is of String type. It means that it can store a group of string. Remember, this array can also store a group of numbers but in the form of string only. Values passed to the main() method is called arguments. These arguments are stored into args[] array, so the name args[] is generally used for it.
+What happens if the main() method is written without String args[]?
+The program will compile, but not run, because JVM will not recognize the main() method. Remember JVM always looks for the main() method with a string type array as a parameter.
+Execution Process
+First, JVM executes the static block, then it executes static methods, and then it creates the object needed by the program. Finally, it executes the instance methods. JVM executes a static block on the highest priority basis. It means JVM first goes to static block even before it looks for the main() method in the program.
+Example
+class  Demo  
+{  
+static                  //static block  
+{  
+System.out.println("Static block");  
+}  
+public static void main(String args[])  //static method  
+{  
+System.out.println("Static method");  
+}  
+}  
+Output:
+Static block
+Static method
