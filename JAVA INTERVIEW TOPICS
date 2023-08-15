@@ -2,6 +2,46 @@ CLASS-
 	A class is a user defined blueprint or prototype from which objects are created.
 	It represents the set of properties or methods that are common to all objects of one type
 
+WHY OVERRIDE METHODS IN POJO:
+	When you're creating simple Java classes (POJOs), it's a good idea to override a few special methods:
+	1. `equals()`: Decide how two objects of your class should be considered equal.
+	2. `hashCode()`: Create a unique number for each object, important for certain data structures.
+	3. `toString()`: Provide a nice human-readable description of your object.
+	These overrides help your classes work better with collections, comparisons, and debugging.
+
+What is a POJO class?
+   Answer: A POJO (Plain Old Java Object) class is a Java class that adheres to basic Java principles without relying on any specific frameworks or libraries. It typically has private fields, public getters and setters, and may optionally override certain methods for better functionality.
+
+Why would you use a POJO class?
+   Answer: POJOs are used to keep the code simple and maintainable. They help encapsulate data and behavior within objects, making it easier to manage and understand the code. POJOs are also useful for data transfer between layers of an application or when interacting with external systems.
+
+What are the key requirements for a class to be considered a POJO?
+   Answer: The key requirements for a class to be considered a POJO are:
+   - The class should have private fields.
+   - It should provide public getter and setter methods for each field (if needed).
+   - It may optionally override methods like `equals`, `hashCode`, and `toString`.
+
+Why is it important to override the `equals`, `hashCode`, and `toString` methods in a POJO class?
+   Answer: These methods affect how instances of a class behave in various contexts: 
+   - `equals`: Determines object equality.
+   - `hashCode`: Ensures consistent behavior in hash-based collections.
+   - `toString`: Provides a human-readable representation of the object.
+
+What is the purpose of the `toString` method in a POJO class?**
+   Answer: The `toString` method provides a user-friendly representation of the object's state. It's useful for debugging, logging, and generating informative output.
+
+Can you give an example of a situation where you might use a POJO class?**
+    Answer: You might use a POJO class to represent a `Person` entity in a database, with fields like name, age, and address, along with getters, setters, and potentially overridden methods.
+
+Apart from `equals`, `hashCode`, and `toString`, are there any other methods you might consider overriding in a POJO class?**
+    Answer: Depending on the situation, you might consider overriding `compareTo` for implementing the `Comparable` interface if you need to compare instances of the class.
+
+What is the role of JavaBeans conventions in POJOs?**
+    Answer: JavaBeans conventions provide guidelines for creating reusable components by adhering to naming and design patterns. POJOs often follow these conventions, which promote consistent and maintainable code.
+
+Can a POJO class extend another class or implement interfaces?**
+    Answer:** Yes, a POJO class can extend another class and implement interfaces. However, you should ensure that the class remains simple and doesn't become tightly coupled with complex inheritance hierarchies.
+
 OBJECTS-
 	An Object is an instance of a Class.
 	When a class is defined, no memory is allocated but when it is instantiated (i.e. an object is created)
