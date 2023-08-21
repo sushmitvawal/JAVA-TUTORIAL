@@ -1,0 +1,274 @@
+Exception handling – best practices
+Exception handling is one of the non-functional requirements for any application development.
+
+We should handle erroneous situations gracefully using exception handling.
+
+Example : Invalid input, File not found in system while reading , number format is not correct etc.
+
+Java provides exception handling to handle these scenarios using try-catch blocks.
+
+There are some set of rules or best practices which we need to follow in exception handling.
+
+
+Let’s discuss some best practices below
+
+
+Practice 1
+Execute Clean up Resources in a Finally Block or Use a Try-With-Resource Statement
+
+We generally use resource statements like opening a file, or connecting to database etc in the try block and we close it at the end of try block
+
+Example :
+
+Copy this code
+package com.kb.Exception;
+ 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+ 
+public class ExceptionHandlingCloseResource {
+ 
+    public static void main(String[] args) {
+        FileReader fileReader = null;
+        BufferedReader bufferedReader = null;
+        try {
+            System.out.println("Code to read the data from File");
+            fileReader = new FileReader("sample.txt");
+ 
+            bufferedReader = new BufferedReader(fileReader);
+ 
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+            }
+ 
+            if (bufferedReader != null) {
+                bufferedReader.close();
+            }
+            if (fileReader != null) {
+                fileReader.close();
+            }
+ 
+        } catch (IOException e) {
+            System.out.println("Inside  catch block");
+        }
+ 
+    }
+ 
+}
+
+What happens in the above code if there is any exception is thrown in try block ?
+
+Example : While reading file, it may throw FileNotFoundException and thus further lines in try block will not be executed and control goes to catch block.
+
+Because of this, we may end up with not closing the resource which leads to resource leakage.
+
+Its always recommended to write resource closing statements inside finally block as it executes all the time no matter whether exception is thrown or not
+
+Copy this code
+package com.kb.Exception;
+ 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+ 
+public class ExceptionHandlingCloseResource {
+ 
+    public static void main(String[] args) {
+        FileReader fileReader = null;
+        BufferedReader bufferedReader = null;
+        try {
+            System.out.println("Code to read the data from File");
+            fileReader = new FileReader("sample.txt");
+ 
+            bufferedReader = new BufferedReader(fileReader);
+ 
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+            }
+ 
+        } catch (IOException e) {
+            System.out.println("Inside  catch block");
+        }
+ 
+        finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    System.out.println("Log exception while closing bufferedReader");
+                }
+            }
+            if (fileReader != null) {
+                try {
+                    fileReader.close();
+                } catch (IOException e) {
+                    System.out.println("Log exception while closing fileReader");
+                }
+            }
+        }
+ 
+    }
+ 
+}
+
+
+Practice 2
+Never swallow the exception in catch block
+
+Copy this code
+catch (IOException e) {
+   return null;
+}
+
+Sometime if our method needs some return value then we handle exception inside catch block and return NULL.
+
+This is dangerous as returning NULL may cause NullPointerException at the caller side and in addition to that we are losing the actual cause of exception
+
+Its better to handle it properly or rethrow the meaningful exception back to caller as below
+
+Copy this code
+catch (IOException e) {
+throw new FileNotFoundException(“File not exist”);
+}
+
+
+Practice 3
+Declare specific exceptions rather than generic exception using throws
+
+Copy this code
+public void readFile() throws Exception {
+}
+
+In the above case, we are wrapping up all the exception into one Exception which does not give much information to caller.
+
+If there are multiple exceptions needs to be thrown then declare each exception separately or create one custom exception and wrap those exceptions in our custom exception and provide meaningful message to caller.
+
+We can do so as below
+
+Copy this code
+public void readFile() throws IOException,SQLException {
+}
+
+
+Practice 4
+Catch most specific exceptions first and then generic exception
+
+This is anyway will not be allowed by java compiler only if we don’t follow this.
+
+We need to write catch blocks for more specific exceptions first as they can be handled first and then generic exception catch block can be written later
+
+Copy this code
+public void catchSpecificExceptionFirst() {
+    try {
+        readFile("sample.txt");
+    } catch (FileNotFoundException e) {
+        System.out.println("Log FileNotFoundException while reading file");
+    } catch (IOException e) {
+        System.out.println("Log IOException while reading file");
+    }
+}
+
+In this case, FileNotFoundException is a subclass of IOException and hence that has to be handled first.
+
+
+Practice 5
+Don’t catch Throwable
+
+We know that Throwable is the superclass of all exceptions and errors
+
+We can use Throwable in catch block but we should never do it
+
+Although errors are subclasses of the Throwable, Errors are irreversible conditions that cannot be handled by JVM itself and hence it is not advised to write catch block with Throwable
+
+
+Practice 6
+Correctly wrap the exception details and send it to caller
+
+Its important to wrap the exception details so that exception trace will not be lost
+
+Example : We should not do it like below
+
+Copy this code
+catch (FileNotFoundException e) {
+   throw new CustomException("Custom message: " + e.getMessage());
+}
+Instead we can do it as below
+
+Copy this code
+catch (FileNotFoundException e) {
+   throw new CustomException("Custom message: " ,e);
+}
+
+
+Practice 7
+Don’t log and throw exception instead do one of these 2, but never do both
+
+Copy this code
+catch (FileNotFoundException e) {
+   LOGGER.error("Custom message", e);
+   throw e;
+}
+
+Logging and throwing the same exception in the same place will result in multiple log messages in log files and makes confusion while analysing the logs
+
+
+Practice 8
+Throw early catch late
+
+This is the most famous principle about Exception handling.
+
+We should throw an exception as soon as we can and we should catch it as late as we can
+
+It means we should throw an exception in low level methods where we execute our business logic and make sure exception is thrown to several layers until we reach specific layer to handle it
+
+Example :
+Throw exception in Service layer and handle it in controller in Spring MVC application
+
+
+Practice 9
+Always use single LOG statement to log exception
+
+Example :
+
+Copy this code
+LOGGER.error(“exception occurred “);
+LOGGER.error(e.getMessage());
+
+If we use multiple LOG statements , It makes multiple calls to Logger and also while writing log, this information may not come together as writing to log happens with multi-threading and all threads dump information to same log file which results these lines to spread in different place in log file.
+
+Instead, we can write it using single LOG statement as below
+
+Copy this code
+LOGGER.error(“exception occurred “+e.getMessage());
+
+
+Practice 10
+Avoid empty catch blocks
+
+This is one of the worst coding if you are keeping empty catch block as it hides the exception thrown and there is no handling of that exception, Even if we don’t want to handle it , its better to at least log the exception details in catch block.
+
+
+Practice 11
+Create custom exception only if its necessary
+
+Java has provided lot of exception which can be used in various scenarios
+
+In case, we need to provide additional information then only we should go for custom exception
+
+
+Practice 12
+Document the exceptions using Javadoc
+
+Whenever method throws any exception, its better to document its details using @throw annotation of Javadoc
+
+Clear documentation of Exception thrown by any method provides complete idea of exception to anyone who is using it.
+
+Conclusion
+We know that exception handling is very important in software application 
+development
+We should also consider the best practices in handling the exception which 
+not only increases the readability of program but also provides robust way 
+of handling the exceptions.
