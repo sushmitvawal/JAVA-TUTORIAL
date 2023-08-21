@@ -1,0 +1,148 @@
+1: What is the output of the below program
+
+package com.kb.exception;
+public class Exception1 {
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		try {
+			int i=9/0;
+			System.out.println(i);
+			return;
+		} catch (Exception e) {
+			System.out.println("exception caught");
+			return;
+		}
+		System.out.println("task completed");
+	}
+}
+if your ans is as below:
+exception caught or task completed
+
+then you are wrong, because there is a return in try block so it makes the last line as unreachable code. So compile time error.
+If we remove return from try then above output will come.
+
+GROUND RULE -> if there is a return statement in try then no code after try- catch will be valid.
+
+2: OUTPUT?
+
+package com.kb.exception;
+public class Exception2 {
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		String returnVal = method1();
+		System.out.println(returnVal);
+	}
+
+	public static String method1() {
+		try {
+			int i = 9;
+			System.out.println(i);
+			return "from try";
+		} catch (Exception e) {
+			System.out.println("exception caught");
+			return "from catch";
+		} finally {
+			System.out.println("finally block executing");
+		}
+	}
+}
+
+Output
+
+9
+finally block executing
+from try
+
+*here try block started it’s execution and no exception so it goes to finally and then return back to caller*
+
+3: OUTPUT?
+
+package com.kb.exception;
+public class Exception2 {
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        String returnVal = method1();
+        System.out.println(returnVal);
+    }
+ 
+    public static String method1() {
+        try {
+            int i = 9;
+            System.out.println(i);
+            return "from try";
+        } catch (Exception e) {
+            System.out.println("exception caught");
+            return "from catch";
+        } finally {
+            System.out.println("finally block executing");
+            return "from finally";
+        }
+    }
+}
+
+OUTPUT:
+9
+finally block executing
+from finally
+
+* Now see the difference , output’s last line got changed. Why ?
+Even though try has return statement finally block gets a chance to execute before try’s return statement 
+and finally has return statement so it returns “from finally” to caller *
+
+
+GROUND RULE
+
+1) If exception does not occur then try continues the execution til the last line before the return statement in try block and then 
+
+control goes to finally block, if finally does not have any return then control comes back to try’s return statement and hence completes. 
+
+If finally has return statement then flow returns from finally it never reaches back to try’s return statement.
+
+ 2) If exception occurs in try block then control jumps to catch block and if catch has return statement then flow excecutes until last line 
+
+before return in catch , then control goes to finally, if finally has return then control returns to caller and if finally does not have return
+
+then control goes back to return statement of catch block.
+
+
+4: Based on above explanation find the output of the below program?
+
+package com.kb.exception;
+public class Exception2 {
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		String returnVal = method1();
+		System.out.println(returnVal);
+	}
+
+	public static String method1() {
+		try {
+			int i = 9/0;
+			System.out.println(i);
+		} catch (Exception e) {
+			System.out.println("exception caught");
+			return "from catch";
+		} finally {
+			System.out.println("finally block executing");
+		}
+		System.out.println("end");
+		return "from end";
+	}
+}
+
+OUTPUT:
+exception caught
+finally block executing
+from catch
+
+
+GROUND RULE
+If there is a return statement in try/catch/finally then it will stop the further execution of the program.
