@@ -1,3 +1,14 @@
+THE JAVA PLATFORM-
+	Java platform has 2 components.
+	1. JVM (used to achieve platform independence)
+	2. JAVA Application Programming Interface (API) -(Bunch of librabies and methods that we use)
+
+	Used to run languages that are not JAVA eg.Groovy, Scala etc are not JAVA but have been written for the JAVA platform
+	The java compiler compiles your source code to an intermediate language (byte code) that is interpreted by the JVM
+	byte code is NOT machine code that gets executed directly. Instead the JVM translates the byte code to machine code, which gets run by the actual platform.
+	byte code is platform independent
+	JAVA APPLICATION --> JAVA COMPILER --> BYTE CODE --> JVM --> MACHINE CODE --> HANDWARE/OS
+
 CLASS-
 	A class is a user defined blueprint or prototype from which objects are created.
 	It represents the set of properties or methods that are common to all objects of one type
