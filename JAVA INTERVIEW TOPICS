@@ -297,28 +297,67 @@ STATIC VARIABLE-
 	(which is not unique for each object),
 	for example, IFSC CODE, BANK NAME.
 	The static variable gets memory only once in the class area at the time of class loading.
+	Static var is a class var
+	Static var can be accessed with the help of class name as well as obj ref
+	eg.
+	Bank b=new Bank();
+	Bank.ifscCode=123 OR b.ifscCode=123 //both are same but the obj ref will give you a warning and also not a good habit to use.
+	As Static var is a class var the var is created and initialized	not when an obj is instantiated but when the class is first loaded in JVM.
+	
+	Static Reference Variables and null:
+		If the reference variable you are working with has a null value (meaning it is not referring to an object), it's in a dangerous state.  
+		Specifically, if you access an instance member with it, you will see the dreaded "NullPointerException."  
+		This is an exception created by the JVM and unless special exception handling code is written, will result in your program quitting prematurely.  
+		
+		For example, the following code will result in a NullPointerException:
+		
+		public static void main(String[] args) {
+		    String s = null;
+		    s = s.toUpperCase(); // Oops! s is null!
+		}
+		Static members are different.  While you shouldn't write sloppy/confusing code like this, 
+		you should know (especially for the exam) that accessing static members with a null Class reference will not throw a NullPointerException.  
+		For example, the java.lang.Math class has a static method called floor:
+		
+		public static void main(String[] args) {
+		    Math m = null;
+		    double result = m.floor(28.15); // Confusing code, but it works.
+		}
+		I want to stress, while the preceding code won't throw a NullPointerException, you shouldn't write code like that. It is much clearer to use the class name:
+		
+		public static void main(String[] args) {
+		    double result = Math.floor(28.15);
+		}
+		See the "Exception Handling" section for more details on exceptions.
+			
 
 STATIC METHOD-
 	A static method belongs to the class rather than the object of a class.
-	No obj creation.Can be accessed using class name.
+	No obj creation.Can be accessed using class name. /both are same but the obj ref will give you a warning and also not a good habit to use.
 	A static method can access static data member and can change the value of it.
 	Static method can be overloaded but cannot override
 	Interface can have static methods	
 	we can call super class static method in sub class but it can't override in sub class.
+	Use?
+	1. to update/fetch the class var data.
+	2. provide the functionality without any need of an obj
 
 	There are two main restrictions for the static method.
 
-	The static method can not use non static data member or call non-static method directly.
+	1. The static method can not use non static data member or call non-static method directly.
 	
 	class A{  
  	int a=40;//non static  
+	static int b=10;
    
  	public static void main(String args[]){  
-  	System.out.println(a);  
+  	a=20; //ILLEGAL(COMPILATION ERROR) AS WE DON'T FOR INSTANCE(OBJ) WE HAVE TO CHANGE THE VALUE OF a to 20 and rest unchagned
+	b=20; //LEGAL as it will be changed for all the objs as b is static ie it belongs to the class
  	}  
 	}  
+	it
 	
-	this and super cannot be used in static context.
+	2. this and super cannot be used in static context.(THIS AND SUPER REFERES TO AN OBJ)
 
 	Why is the Java main method static?
 	Ans) It is because the object is not required to call a static method. If it were a non-static method, 
@@ -328,10 +367,77 @@ STATIC METHOD-
 	 but if you call the same method from superclass then the one in superclass will be invoked. 
 	This is known as method hiding in Java.
 
+	Q:What is the result of the following code:
+		public class Person {
+		    String firstName;
+		    static void setFirstName(String newValue) {
+		        firstName = newValue;
+		    }
+		    public static void main(String[] args) {
+		        Person p = new Person();
+		        p.setFirstName("Jason");
+		        System.out.println( "firstName: " + p.firstName );
+		    }
+		}
+		Ans: Compilation error
+		Static methods cannot access instance variable or methods. Plus, we really shouldn't call static methods with an object reference (p). 
+		That, in itself isn't illegal, but it is considered poor coding.
+
+
+	Q: True or False:  A static method can only be invoked after at least one object has been instantiated.
+		Ans: False
+		Static methods and variables are available as soon as the class has been loaded.
+
+
 STATIC BLOCK-
-	Is used to initialize the static data member.
-	It is executed before the main method at the time of classloading.
+	Is used to initialize the static data member. Cannot initialize non-static AS WE DON'T FOR INSTANCE(OBJ) WE HAVE TO CHANGE THE VALUE and keep rest unchagned
+	cannot even call non-methods inside a static block as It is executed before the main method at the time of classloading
+	so we don't know anything about initialization of the variables/parameters etc. So basically, we cannot call instance methods/variables froma static block 
+	we can call statiic method tho as it is laoded at the time of class loading
 	We can have Multiple static block in the code.
+
+	public class Person {
+		    {
+		        personCount = 10;
+		    }
+		    static {
+		        personCount = 20;
+		    }
+		    private static int personCount = 1000;
+		    {
+		        personCount = 30;
+		    }
+		    static {
+		        personCount = 40;
+		    }
+		    public static void main(String[] args) {
+		       System.out.println(Person.personCount); 
+		       Person p = new Person();
+		       System.out.println(Person.personCount);
+		       Person.personCount = 100; 
+		       p = new Person();
+		       System.out.println(Person.personCount);
+		    }
+		}
+
+OUTPUT:
+40
+30
+30
+
+EXPLANATION:
+When the program starts and this main method is kicked off, the Person class is loaded.  
+This, in turn, makes the static personCount variable available, with a default value of 0 (remember, all instance and static variables start with default values).
+
+Next all of the static initialization blocks, and the static variable's explicit initialization are executed in the order they are listed, from top to bottom.  
+Therefore, the personCount variable is set to 20, 1000, and finally 40.  So Line A prints "40."
+
+On Line B, an object is instantiated, so that causes the instance initialization blocks to be executed in the order they are listed, from top to bottom.  
+So now personCount is changed to 10 and finally 30.  Line C prints the value "30."
+
+Line D changes the personCount to 100, but Line E causes the instance initialilzation blocks to be executed again.  
+Therefore, the final value printed in Line F is, once again, "30."
+
 
 STATIC CLASS-
 	A class can be made static only if it is a nested class.
