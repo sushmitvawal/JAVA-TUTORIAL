@@ -139,11 +139,21 @@ STACKS AND HEAP-
 	c --> stack
 	new Cust("a") --> heap
 
+SCOPE-
+
+
 CONSTRUCTOR-
 	Constructor is a block of code that initializes the newly created object.
 	It is special type of method which has same name as the class name.
 	It does NOT have a return type.
 	If you see any cons with return type, it's no more a cons, it is treated as a normal method.
+	For a calling another cons inside the current cons use this
+		eg for calling no-arg cons
+		this();
+		eg for calling parameterized cons
+		this("Sushmit", 22);
+		this should always be in the first line of the cons
+		this();/this("Sushmit", 22); cannot be used in any other other method
 	There are four types of constructors: Default, No-arg constructor, Parameterized and Copy.
 
 	If you do not implement any constructor in your class, 
@@ -161,6 +171,12 @@ CONSTRUCTOR-
 	throw and error. You should have a no-arg cons for that.
 	
 	A copy constructor is used for copying the values of one object to another object.
+
+		
+
+		NOTE: INITIALIZATION BLOCK IS CALLED EVEN BEFORE THE CONSTRUCTOR
+	
+
 	
 	With the following class:
 
