@@ -9,6 +9,37 @@ THE JAVA PLATFORM-
 	byte code is platform independent
 	JAVA APPLICATION --> JAVA COMPILER --> BYTE CODE --> JVM --> MACHINE CODE --> HANDWARE/OS
 
+	What components makes up the Java Runtime Environment (JRE)?
+	Ans:
+	1. JVM
+	2. JAVA Application Programming Interface (API) 
+	
+	True or False: The JVM is able to run languages other than Java?
+	Ans: True
+
+EDITIONS OF JAVA:
+	1. JAVA EE(ENTERPRISE) (build distributed applications. eg using web features in our applications)
+	2. JAVA SE(STANDARD) (basic codiing)
+	3. JAVA ME(MICRO)(Used in IOT eg code for automatic fans)
+	JAVA EE  is a superset of JAVA SE and JAVA SE is superset of JAVA ME
+	JAVA EE --> JAVA SE --> JAVA ME
+
+MAIN METHOD:
+	public static void main(String[] args) can also be written as  static public void main(String[] args)
+	the order doesn't matter as long as it is to the left of returntype	 
+	It must return "void."
+	The name "main" must be written in all lowercase
+	It must declare a String array parameter (where the square brackets may be written to the right of String or to the right of the identifier).
+	The identifier for the String array may be named anything you'd like (though, by convention, it is typically "args").
+	
+	Is this correct?
+	static public void main(String command_Line_Arguments[])
+	Ans: YES
+
+COMPILING CODE:
+	Using javac filename.java will create a filname.class file which is the byte code(binary). Then "java filename" cmd will run the .class file and give an output. 
+
+
 CLASS-
 	A class is a user defined blueprint or prototype from which objects are created.
 	It represents the set of properties or methods that are common to all objects of one type
