@@ -43,6 +43,8 @@ COMPILING CODE:
 CLASS-
 	A class is a user defined blueprint or prototype from which objects are created.
 	It represents the set of properties or methods that are common to all objects of one type
+	For eg, a blueprint of a house tells you a lot about the structure and characteristics but you cannot live in a blueprint right?
+	So we have to create a actual house(obj) out of the blueprint to order to live in it.
 
 	public class HelloWorld{
 	...
@@ -85,6 +87,32 @@ OBJECT:
 	A:  A member is any piece of state or behavior that belongs to the class or object.  
 	In general, a member refers to any field, method, or constructor in a class.  
 	However, sometimes the term "class member" is used to specifically refer to static methods and static variables.
+
+	Ways to create obj in JAVA
+	
+		Using new keyword:
+		GFG obj = new GFG();
+		 
+		Using new instance:
+		A bit complex so skip the implementation
+		
+		Using clone() method:
+		GFG obj1 = new GFG();
+		GFG obj2 = (GFG)obj1.clone();
+		
+		Using deserialization:
+		Whenever we serialize and then deserialize an object, JVM creates a separate object. 
+		In deserialization, JVM doesn’t use any constructor to create the object. 
+		
+		Using newInstance() method of Constructor class
+		This is similar to the newInstance() method of a class. There is one newInstance() method in the java.lang.reflect.Constructor class which we can use to create objects. 
+		It can also call the parameterized constructor, and private constructor by using this newInstance() method. Both newInstance() methods are known as reflective ways to create objects. 
+		In fact newInstance() method of Class internally uses newInstance() method of Constructor class. 
+		Constructor<GFG> constructor
+		                = GFG.class.getDeclaredConstructor();
+		 
+		            GFG r = constructor.newInstance();
+		
 
 PRIMITIVE DATA TYPES- 
 	8 datatypes: byte,short,int, long, float, double, boolean, char(String is a class from JAVA API and not a primitive type)
@@ -147,6 +175,55 @@ CONSTRUCTOR-
 	Ans: The car is a Silver null
 	Explanantion:  notice that the second Car constructor is "model" rather than "type." Yet the System.out.println statement is referencing "type." 
 	Since type is an instance variable it is legal to reference even though it hasn't been initialized with an explicit value (it has a default value: "null.")
+
+	Q:  What's the difference between a "default" and a "no-arg" constructor?
+	
+	A:  A "no-arg" constructor is one that lists no parameters (it takes no arguments but can contain lines of code).  
+	A "default" constructor is a "no-arg" constructor that is created by the compiler, in the event that you don't explicitly create one yourself.
+
+	Q: public class Car{
+				String colour="Green"; //in line initialization
+				{
+					colour= "Red";  //initialization block
+				}
+				Car (){
+					colour="Blue";
+				  }
+				}
+	Explain the intialization step wise
+	ANS: First the String colour varialble is created and assigned null-->Green-->Red-->Blue
+
+
+	Q: public class Car{
+				{
+					colour= "Red";  //initialization block
+				}
+				String colour="Green"; //in line initialization
+				
+				Car (){
+					colour="Blue";
+				  }
+				}
+	Explain the intialization step wise
+	ANS: First the String colour varialble is created and assigned null-->Red-->Green-->Blue
+
+	Q: public class Car{
+
+				Car (){
+					colour="Blue";
+				  }
+
+				{
+					colour= "Red";  //initialization block
+				}
+				String colour="Green"; //in line initialization
+				
+				}
+	Explain the intialization step wise
+	ANS: First the String colour varialble is created and assigned null-->Red-->Green-->Blue
+
+	So placement of initialzation block matter but constructor does not matter
+	You can have multiple initialization blocks
 
 
 SUPER-
