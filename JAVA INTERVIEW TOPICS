@@ -64,9 +64,9 @@ CLASS-
 	public void doSomething() {
 	    return;
 	}
-	As mentioned, it's pretty uncommon (and useless) to see a return like that on it's own... though it can be used to end a method inside of a control structure.  You'll learn more about control structures in the Syntax section.
+	As mentioned, it's pretty uncommon (and useless) to see a return like that on it's own... though it can be used to end a method inside of a control structure.
 
-
+OBJECT:
 	An Object is an instance of a Class.
 	objects are bundles of state and behaviour
 	When a class is defined, no memory is allocated but when it is instantiated (i.e. an object is created)
@@ -87,7 +87,17 @@ CLASS-
 	However, sometimes the term "class member" is used to specifically refer to static methods and static variables.
 
 PRIMITIVE DATA TYPES- 
-	8 datatypes: byte,short,int, long, float, double, boolean, char
+	8 datatypes: byte,short,int, long, float, double, boolean, char(String is a class from JAVA API and not a primitive type)
+	Default values:
+	byte        0
+	short       0
+	int         0
+	long        0
+	float       0.0f
+	double      0.0d
+	char        '\u0000'
+	boolean     false
+	*Default value for String(or any JAVA obj) is null*
 	Everything else in JAVA is an obj
 	PRimitive just has a single value(state) unlike obj which has state(value) and behaviour(methods)
 	int chaptersToStudy = 3, 4, 5; // ILLEGAL
@@ -104,13 +114,15 @@ STACKS AND HEAP-
 CONSTRUCTOR-
 	Constructor is a block of code that initializes the newly created object.
 	It is special type of method which has same name as the class name.
-	It does not have a return type.
+	It does NOT have a return type.
+	If you see any cons with return type, it's no more a cons, it is treated as a normal method.
 	There are four types of constructors: Default, No-arg constructor, Parameterized and Copy.
 
 	If you do not implement any constructor in your class, 
 	Java compiler inserts a default constructor into your code on your behalf.
 	This constructor is known as default constructor. 
 	If you implement any constructor then you no longer receive a default constructor from Java compiler.
+	In that case, if you try to call a no arg/default cons, it will give a compile time error
 
 	Constructor with no arguments is known as no-arg constructor.
 	The signature is same as default constructor, 
@@ -121,6 +133,20 @@ CONSTRUCTOR-
 	throw and error. You should have a no-arg cons for that.
 	
 	A copy constructor is used for copying the values of one object to another object.
+	
+	With the following class:
+
+	public class Car {
+	    String type;
+	    String color;
+	    Car( String color, String model ) {
+	        System.out.println("The car is a " + color + " " + type);
+	    }
+	}
+	What will the output be after an object is instantiated: Car myCar = new Car("Silver", "Sedan");
+	Ans: The car is a Silver null
+	Explanantion:  notice that the second Car constructor is "model" rather than "type." Yet the System.out.println statement is referencing "type." 
+	Since type is an instance variable it is legal to reference even though it hasn't been initialized with an explicit value (it has a default value: "null.")
 
 
 SUPER-
@@ -430,120 +456,119 @@ There are two ways to check if two Strings are equal or not – using “==” o
 COLLECTION FRAMEWORK-
 	
 
-The Collection in Java is a framework that provides an architecture to store and manipulate the group of objects.
-
-Java Collections can achieve all the operations that you perform on a data such as searching, sorting, insertion, manipulation, and deletion.
-
-	Java Collection means a single unit of objects. 
-	Java Collection framework provides many interfaces (Set, List, Queue, Deque) 
-	and classes (ArrayList, Vector, LinkedList, PriorityQueue, HashSet, LinkedHashSet, TreeSet).	
-
-
+	The Collection in Java is a framework that provides an architecture to store and manipulate the group of objects.
 	
-	What are the two ways to iterate the elements of a collection?
-	ANS- ITERATOR INTERFACE,FOREACH LLOP,LISTITERATOR INTERFACE,FORLOOP.
-
-
-	What is the difference between ArrayList and LinkedList classes in collection framework?
-	ANS 		ARRAY LIST			LINKED LIST
-		INTERNALLY USES DYNAMIC ARR	INTERNALLY USES DOUBLY LINKEDLIST
+	Java Collections can achieve all the operations that you perform on a data such as searching, sorting, insertion, manipulation, and deletion.
+	
+		Java Collection means a single unit of objects. 
+		Java Collection framework provides many interfaces (Set, List, Queue, Deque) 
+		and classes (ArrayList, Vector, LinkedList, PriorityQueue, HashSet, LinkedHashSet, TreeSet).	
+	
+	
 		
-		MANIPULATION IS SLOW		MANIPULATON IS FAST
+		What are the two ways to iterate the elements of a collection?
+		ANS- ITERATOR INTERFACE,FOREACH LLOP,LISTITERATOR INTERFACE,FORLOOP.
 	
-		CAN ACT AS A LIST		CAN ACT AS LIST AND QUEUE
-						AS IT IMPLEMENTS LIST AND DEQUEUE INTERFACE
-
-		BETTER FOR STORING DATA		BETTER FOR MANIPULATING DATA
-
 	
-	What is the difference between ArrayList and Vector classes in collection framework?
-
-			ARRAY LIST					VECTOR
-
-		NOT SYNCRONIZED					SYNCRONIZED
+		What is the difference between ArrayList and LinkedList classes in collection framework?
+		ANS 		ARRAY LIST			LINKED LIST
+			INTERNALLY USES DYNAMIC ARR	INTERNALLY USES DOUBLY LINKEDLIST
+			
+			MANIPULATION IS SLOW		MANIPULATON IS FAST
 		
-		Increments 50% of current			increments 100% of current
-		size if total no of elements exceeds		ie doubles arraysize if total no of
-		from its capacity				elements exceeds the capacity
-
-		Not legacy class(introduced in JDK1.2)		It is a legacy class
-
-		Fast(Not syncronized)				Slow(Syncronized)
-
-		Uses Iterator interface to traverse		Uses Iterator or Enumeration interface to traverse
-
-
-	What is the difference between HashSet and HashMap classes in collection framework?
-
-			HASH SET					HASH MAP
-
-		Implements Set Interface			Implements Map interface
-
-		store objects(elements or values)		storing key & value pairs.
-
-		HashSet does not allow duplicate elements	HashMap does not allow duplicate keys 
-								however it allows to have duplicate values
-
-permits to have a single null value.		 permits single null key and any   number of null values.
-
-
-	What is the difference between HashMap and Hashtable class?
-
+			CAN ACT AS A LIST		CAN ACT AS LIST AND QUEUE
+							AS IT IMPLEMENTS LIST AND DEQUEUE INTERFACE
 	
-
+			BETTER FOR STORING DATA		BETTER FOR MANIPULATING DATA
+	
 		
-What is the difference between Iterator and Enumeration interface in collection framework?
+		What is the difference between ArrayList and Vector classes in collection framework?
+	
+				ARRAY LIST					VECTOR
+	
+			NOT SYNCRONIZED					SYNCRONIZED
+			
+			Increments 50% of current			increments 100% of current
+			size if total no of elements exceeds		ie doubles arraysize if total no of
+			from its capacity				elements exceeds the capacity
+	
+			Not legacy class(introduced in JDK1.2)		It is a legacy class
+	
+			Fast(Not syncronized)				Slow(Syncronized)
+	
+			Uses Iterator interface to traverse		Uses Iterator or Enumeration interface to traverse
 	
 	
-
-How can we sort the elements of an object? What is the difference between Comparable and Comparator interfaces?
-ANS- public void sort(List list)
+		What is the difference between HashSet and HashMap classes in collection framework?
 	
-
-What is the difference between Java collection and Java collections?
-
+				HASH SET					HASH MAP
 	
-WHY OVERRIDE METHODS IN POJO:
-	When you're creating simple Java classes (POJOs), it's a good idea to override a few special methods:
-	1. `equals()`: Decide how two objects of your class should be considered equal.
-	2. `hashCode()`: Create a unique number for each object, important for certain data structures.
-	3. `toString()`: Provide a nice human-readable description of your object.
-	These overrides help your classes work better with collections, comparisons, and debugging.
+			Implements Set Interface			Implements Map interface
+	
+			store objects(elements or values)		storing key & value pairs.
+	
+			HashSet does not allow duplicate elements	HashMap does not allow duplicate keys 
+									however it allows to have duplicate values
+	
+	permits to have a single null value.		 permits single null key and any   number of null values.
+	
+	
+		What is the difference between HashMap and Hashtable class?
+	
+		
+	
+			
+	What is the difference between Iterator and Enumeration interface in collection framework?
+		
+		
+	
+	How can we sort the elements of an object? What is the difference between Comparable and Comparator interfaces?
+	ANS- public void sort(List list)
+		
+	
+	What is the difference between Java collection and Java collections?
 
-What is a POJO class?
-   Answer: A POJO (Plain Old Java Object) class is a Java class that adheres to basic Java principles without relying on any specific frameworks or libraries. It typically has private fields, public getters and setters, and may optionally override certain methods for better functionality.
-
-Why would you use a POJO class?
-   Answer: POJOs are used to keep the code simple and maintainable. They help encapsulate data and behavior within objects, making it easier to manage and understand the code. POJOs are also useful for data transfer between layers of an application or when interacting with external systems.
-
-What are the key requirements for a class to be considered a POJO?
-   Answer: The key requirements for a class to be considered a POJO are:
-   - The class should have private fields.
-   - It should provide public getter and setter methods for each field (if needed).
-   - It may optionally override methods like `equals`, `hashCode`, and `toString`.
-
-Why is it important to override the `equals`, `hashCode`, and `toString` methods in a POJO class?
-   Answer: These methods affect how instances of a class behave in various contexts: 
-   - `equals`: Determines object equality.
-   - `hashCode`: Ensures consistent behavior in hash-based collections.
-   - `toString`: Provides a human-readable representation of the object.
-
-What is the purpose of the `toString` method in a POJO class?**
-   Answer: The `toString` method provides a user-friendly representation of the object's state. It's useful for debugging, logging, and generating informative output.
-
-Can you give an example of a situation where you might use a POJO class?**
-    Answer: You might use a POJO class to represent a `Person` entity in a database, with fields like name, age, and address, along with getters, setters, and potentially overridden methods.
-
-Apart from `equals`, `hashCode`, and `toString`, are there any other methods you might consider overriding in a POJO class?**
-    Answer: Depending on the situation, you might consider overriding `compareTo` for implementing the `Comparable` interface if you need to compare instances of the class.
-
-What is the role of JavaBeans conventions in POJOs?**
-    Answer: JavaBeans conventions provide guidelines for creating reusable components by adhering to naming and design patterns. POJOs often follow these conventions, which promote consistent and maintainable code.
-
-Can a POJO class extend another class or implement interfaces?**
-    Answer:** Yes, a POJO class can extend another class and implement interfaces. However, you should ensure that the class remains simple and doesn't become tightly coupled with complex inheritance hierarchies.
-
-OBJECTS-		
+POJO-
+	
+	WHY OVERRIDE METHODS IN POJO:
+		When you're creating simple Java classes (POJOs), it's a good idea to override a few special methods:
+		1. `equals()`: Decide how two objects of your class should be considered equal.
+		2. `hashCode()`: Create a unique number for each object, important for certain data structures.
+		3. `toString()`: Provide a nice human-readable description of your object.
+		These overrides help your classes work better with collections, comparisons, and debugging.
+	
+	What is a POJO class?
+	   Answer: A POJO (Plain Old Java Object) class is a Java class that adheres to basic Java principles without relying on any specific frameworks or libraries. It typically has private fields, public getters and setters, and may optionally override certain methods for better functionality.
+	
+	Why would you use a POJO class?
+	   Answer: POJOs are used to keep the code simple and maintainable. They help encapsulate data and behavior within objects, making it easier to manage and understand the code. POJOs are also useful for data transfer between layers of an application or when interacting with external systems.
+	
+	What are the key requirements for a class to be considered a POJO?
+	   Answer: The key requirements for a class to be considered a POJO are:
+	   - The class should have private fields.
+	   - It should provide public getter and setter methods for each field (if needed).
+	   - It may optionally override methods like `equals`, `hashCode`, and `toString`.
+	
+	Why is it important to override the `equals`, `hashCode`, and `toString` methods in a POJO class?
+	   Answer: These methods affect how instances of a class behave in various contexts: 
+	   - `equals`: Determines object equality.
+	   - `hashCode`: Ensures consistent behavior in hash-based collections.
+	   - `toString`: Provides a human-readable representation of the object.
+	
+	What is the purpose of the `toString` method in a POJO class?**
+	   Answer: The `toString` method provides a user-friendly representation of the object's state. It's useful for debugging, logging, and generating informative output.
+	
+	Can you give an example of a situation where you might use a POJO class?**
+	    Answer: You might use a POJO class to represent a `Person` entity in a database, with fields like name, age, and address, along with getters, setters, and potentially overridden methods.
+	
+	Apart from `equals`, `hashCode`, and `toString`, are there any other methods you might consider overriding in a POJO class?**
+	    Answer: Depending on the situation, you might consider overriding `compareTo` for implementing the `Comparable` interface if you need to compare instances of the class.
+	
+	What is the role of JavaBeans conventions in POJOs?**
+	    Answer: JavaBeans conventions provide guidelines for creating reusable components by adhering to naming and design patterns. POJOs often follow these conventions, which promote consistent and maintainable code.
+	
+	Can a POJO class extend another class or implement interfaces?**
+	    Answer:** Yes, a POJO class can extend another class and implement interfaces. However, you should ensure that the class remains simple and doesn't become tightly coupled with complex inheritance hierarchies.
 	
 
 
