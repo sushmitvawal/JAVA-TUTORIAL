@@ -44,50 +44,62 @@ CLASS-
 	A class is a user defined blueprint or prototype from which objects are created.
 	It represents the set of properties or methods that are common to all objects of one type
 
-WHY OVERRIDE METHODS IN POJO:
-	When you're creating simple Java classes (POJOs), it's a good idea to override a few special methods:
-	1. `equals()`: Decide how two objects of your class should be considered equal.
-	2. `hashCode()`: Create a unique number for each object, important for certain data structures.
-	3. `toString()`: Provide a nice human-readable description of your object.
-	These overrides help your classes work better with collections, comparisons, and debugging.
+	public class HelloWorld{
+	...
+	}
+	class HelperClass{
+	...
+	}
+	In the above eg
+	NOTE: Each file may contain only 1 'public' top level class(and that will be the name of the file)
+	Other top level classes may be added to the same file but they must not list the access modifier.
 
-What is a POJO class?
-   Answer: A POJO (Plain Old Java Object) class is a Java class that adheres to basic Java principles without relying on any specific frameworks or libraries. It typically has private fields, public getters and setters, and may optionally override certain methods for better functionality.
+	A method that declares a return type of void cannot return any value.  So, for example, the following is illegal and would not compile:
 
-Why would you use a POJO class?
-   Answer: POJOs are used to keep the code simple and maintainable. They help encapsulate data and behavior within objects, making it easier to manage and understand the code. POJOs are also useful for data transfer between layers of an application or when interacting with external systems.
+	public void doSomething() {
+	    return "Hello!";
+	}
+	It is, however, legal (though uncommon) to just use the return statement.  
+	
+	public void doSomething() {
+	    return;
+	}
+	As mentioned, it's pretty uncommon (and useless) to see a return like that on it's own... though it can be used to end a method inside of a control structure.  You'll learn more about control structures in the Syntax section.
 
-What are the key requirements for a class to be considered a POJO?
-   Answer: The key requirements for a class to be considered a POJO are:
-   - The class should have private fields.
-   - It should provide public getter and setter methods for each field (if needed).
-   - It may optionally override methods like `equals`, `hashCode`, and `toString`.
 
-Why is it important to override the `equals`, `hashCode`, and `toString` methods in a POJO class?
-   Answer: These methods affect how instances of a class behave in various contexts: 
-   - `equals`: Determines object equality.
-   - `hashCode`: Ensures consistent behavior in hash-based collections.
-   - `toString`: Provides a human-readable representation of the object.
-
-What is the purpose of the `toString` method in a POJO class?**
-   Answer: The `toString` method provides a user-friendly representation of the object's state. It's useful for debugging, logging, and generating informative output.
-
-Can you give an example of a situation where you might use a POJO class?**
-    Answer: You might use a POJO class to represent a `Person` entity in a database, with fields like name, age, and address, along with getters, setters, and potentially overridden methods.
-
-Apart from `equals`, `hashCode`, and `toString`, are there any other methods you might consider overriding in a POJO class?**
-    Answer: Depending on the situation, you might consider overriding `compareTo` for implementing the `Comparable` interface if you need to compare instances of the class.
-
-What is the role of JavaBeans conventions in POJOs?**
-    Answer: JavaBeans conventions provide guidelines for creating reusable components by adhering to naming and design patterns. POJOs often follow these conventions, which promote consistent and maintainable code.
-
-Can a POJO class extend another class or implement interfaces?**
-    Answer:** Yes, a POJO class can extend another class and implement interfaces. However, you should ensure that the class remains simple and doesn't become tightly coupled with complex inheritance hierarchies.
-
-OBJECTS-
 	An Object is an instance of a Class.
+	objects are bundles of state and behaviour
 	When a class is defined, no memory is allocated but when it is instantiated (i.e. an object is created)
-	Memory is allocated.
+	Memory is allocated. So using new keyword actually creates the obj.
+	Customer 		c 	= 	new 		Customer();
+	Reference Type		Ref var		keyword		Object type
+	
+	just like in int c=45; we expect that c will receive a value of type integer, similarly while creating an obj we expect the ref variable will receive a value of Ref type.
+	Parent child= new child(); is possible because child class is a type of parent class as it is extending it.
+	The technical term to create an obj is instantiation
+	C c =new C("a");
+	C c =new C("b");
+	C c =new C("c"); is completly fine as the ref is now pointing to diff obj. The garbage collectors looks for objs which are not reffered by anybody and destroys them.
+	
+	What's a "member" of a class or an object?
+	A:  A member is any piece of state or behavior that belongs to the class or object.  
+	In general, a member refers to any field, method, or constructor in a class.  
+	However, sometimes the term "class member" is used to specifically refer to static methods and static variables.
+
+PRIMITIVE DATA TYPES- 
+	8 datatypes: byte,short,int, long, float, double, boolean, char
+	Everything else in JAVA is an obj
+	PRimitive just has a single value(state) unlike obj which has state(value) and behaviour(methods)
+	int chaptersToStudy = 3, 4, 5; // ILLEGAL
+	int chaptersToStudy = 3; //LEGAL
+
+STACKS AND HEAP-
+	Memory in JAVA is managed by Stacks and Heap
+	Heap is a large portion of memory where all objects are going to live and stack is short memory where we have our ref vars etc
+	Stack is a list of references that are defined within a given block of code(scope i.e. {}).
+	Cust c =new Cust("a");
+	c --> stack
+	new Cust("a") --> heap
 
 CONSTRUCTOR-
 	Constructor is a block of code that initializes the newly created object.
@@ -138,34 +150,34 @@ PRIVATE CONSTRUCTOR-
 
 STATIC CONSTRUCTOR-
 	Not allowed in Java.
-Static variable /methods(cons is kind of a method) are associated with class and not the obj where as constructor is basically used to initialize the obj.
+	Static variable /methods(cons is kind of a method) are associated with class and not the obj where as constructor is basically used to initialize the obj.
 
 
-QUICK RECAP
+QUICK RECAP-
 
-Every class has a constructor whether it’s a normal class or an abstract class.
-
-Constructors are not methods and they don’t have any return type.
-
-Constructor can use any access specifier, 
-they can be declared as private also. 
-Private constructors are possible in java but there scope is within the class only.
-
-Like constructors method can also have name same as class name, 
-but still they have return type, though which we can identify them that they are methods not constructors.
-
-this() and super() should be the first statement in the constructor code.
-Constructor overloading is possible but overriding is not possible. 
-Which means we can have overloaded constructor in our class but we can’t override a constructor.
-Constructors can not be inherited.
-
-Interfaces do not have constructors.
-
-Abstract class can have constructor and it gets invoked when a class, 
-which implements interface, is instantiated. (i.e. object creation of concrete class).
-
-A constructor can also invoke another constructor of the same class – By using this(). 
-If you want to invoke a parameterized constructor then do it like this: this(parameter list).	
+	Every class has a constructor whether it’s a normal class or an abstract class.
+	
+	Constructors are not methods and they don’t have any return type.
+	
+	Constructor can use any access specifier, 
+	they can be declared as private also. 
+	Private constructors are possible in java but there scope is within the class only.
+	
+	Like constructors method can also have name same as class name, 
+	but still they have return type, though which we can identify them that they are methods not constructors.
+	
+	this() and super() should be the first statement in the constructor code.
+	Constructor overloading is possible but overriding is not possible. 
+	Which means we can have overloaded constructor in our class but we can’t override a constructor.
+	Constructors can not be inherited.
+	
+	Interfaces do not have constructors.
+	
+	Abstract class can have constructor and it gets invoked when a class, 
+	which implements interface, is instantiated. (i.e. object creation of concrete class).
+	
+	A constructor can also invoke another constructor of the same class – By using this(). 
+	If you want to invoke a parameterized constructor then do it like this: this(parameter list).	
 
 STATIC-
 	The static keyword belongs to the class than an instance of the class.
@@ -491,7 +503,47 @@ ANS- public void sort(List list)
 What is the difference between Java collection and Java collections?
 
 	
-		
+WHY OVERRIDE METHODS IN POJO:
+	When you're creating simple Java classes (POJOs), it's a good idea to override a few special methods:
+	1. `equals()`: Decide how two objects of your class should be considered equal.
+	2. `hashCode()`: Create a unique number for each object, important for certain data structures.
+	3. `toString()`: Provide a nice human-readable description of your object.
+	These overrides help your classes work better with collections, comparisons, and debugging.
+
+What is a POJO class?
+   Answer: A POJO (Plain Old Java Object) class is a Java class that adheres to basic Java principles without relying on any specific frameworks or libraries. It typically has private fields, public getters and setters, and may optionally override certain methods for better functionality.
+
+Why would you use a POJO class?
+   Answer: POJOs are used to keep the code simple and maintainable. They help encapsulate data and behavior within objects, making it easier to manage and understand the code. POJOs are also useful for data transfer between layers of an application or when interacting with external systems.
+
+What are the key requirements for a class to be considered a POJO?
+   Answer: The key requirements for a class to be considered a POJO are:
+   - The class should have private fields.
+   - It should provide public getter and setter methods for each field (if needed).
+   - It may optionally override methods like `equals`, `hashCode`, and `toString`.
+
+Why is it important to override the `equals`, `hashCode`, and `toString` methods in a POJO class?
+   Answer: These methods affect how instances of a class behave in various contexts: 
+   - `equals`: Determines object equality.
+   - `hashCode`: Ensures consistent behavior in hash-based collections.
+   - `toString`: Provides a human-readable representation of the object.
+
+What is the purpose of the `toString` method in a POJO class?**
+   Answer: The `toString` method provides a user-friendly representation of the object's state. It's useful for debugging, logging, and generating informative output.
+
+Can you give an example of a situation where you might use a POJO class?**
+    Answer: You might use a POJO class to represent a `Person` entity in a database, with fields like name, age, and address, along with getters, setters, and potentially overridden methods.
+
+Apart from `equals`, `hashCode`, and `toString`, are there any other methods you might consider overriding in a POJO class?**
+    Answer: Depending on the situation, you might consider overriding `compareTo` for implementing the `Comparable` interface if you need to compare instances of the class.
+
+What is the role of JavaBeans conventions in POJOs?**
+    Answer: JavaBeans conventions provide guidelines for creating reusable components by adhering to naming and design patterns. POJOs often follow these conventions, which promote consistent and maintainable code.
+
+Can a POJO class extend another class or implement interfaces?**
+    Answer:** Yes, a POJO class can extend another class and implement interfaces. However, you should ensure that the class remains simple and doesn't become tightly coupled with complex inheritance hierarchies.
+
+OBJECTS-		
 	
 
 
