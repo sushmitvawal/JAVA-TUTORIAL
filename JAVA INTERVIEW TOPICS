@@ -545,6 +545,21 @@ STATIC CLASS-
 STATIC CONSTRUCTOR-
 	Not possible.
 
+GARBAGE COLLECTOR:
+
+The JRE manages the memory for you
+You never have to destroy the obj explicitly or manage the memory it uses
+The JRE deeletes the obj when it determines that they are no longer being used. This process is known as garbage collection
+The JRE's garbage collector periodically searches memory for 'free'(unreferenced) obj that are no longer needed
+When it finds one, it removes it from the heap
+You can explicitly give a hint/suggesstion to the garbage collector by running the following command
+System.gc();
+This is just a suggesstion but we're not sure if the garbage collector will run for sure(might/might not)
+eg.
+Car myCar=new Car(1,"Suzuki");
+myCar=new Car(2,"honda");
+//Car(1,"Suzuki") is now eligible for gc as it is no longer referenced
+
 
 INHERITANCE-
 	The process by which one class acquires the properties(data members) and functionalities(methods) of another class is called inheritance. 
