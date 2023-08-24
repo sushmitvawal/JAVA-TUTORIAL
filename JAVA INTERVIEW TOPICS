@@ -560,6 +560,200 @@ Car myCar=new Car(1,"Suzuki");
 myCar=new Car(2,"honda");
 //Car(1,"Suzuki") is now eligible for gc as it is no longer referenced
 
+IF/ELSE-
+
+	More on If/Else If/Else Statements
+	More Examples
+	In addition to using a boolean variable, a conditional statement may use a boolean literal, boolean operator, or a boolean return value from a method.  Here are some examples of these other forms:
+	
+		// boolean literal
+		if( true ) {
+		}
+		// boolean operator (>= is 'greater than or equal to')
+		if( myAge >= 40 ) {
+		}
+		// boolean return value from a method
+		public boolean doSomething() { 
+		    return true;
+		}
+		if( doSomething() ) {
+		}
+	Variable Scope
+	Any variable that is declared in the conditional statement is local to that block. For example, the following would be illegal:
+	
+		int age = 40;
+		if (age >= 25) {
+		    // Note the "String" reference type.
+		    // That means we're declaring the variable
+		    // in this scope.
+		    String message = "25 years or older.";
+		}
+		System.out.println(message); // ILLEGAL, message is out of scope
+
+	If the variable is assigned inside the conditional, but is also to be used outside of it, make sure the variable is declared outside as well.  
+	
+		String message = null; // Declaration of "message"
+		int age = 40;
+		if (age >= 25) {
+		    // Note that we've dropped the "String" reference type
+		    // Which means we're referring to, rather than declaring
+		    // the message variable
+		    message = "25 years or older.";
+		}
+		System.out.println(message); // LEGAL
+	Braces
+	I mentioned that if a conditional doesn't use braces, only the first statement is considered a part of the conditional block (any subsequent statements are just normal statements, which will be executed every time).
+	For example, due to the lack of braces, line A  below will be executed every time, even when the if block is evaluated to be false.
+	
+	if (age >= 25) 
+	    message = "25 years or older.";
+	    otherMessage = "More text..."; // LINE A
+	
+	
+	... and the same goes for this example... even when age >= 25 (so the else block isn't entered), Line A is printed.
+	
+	
+	
+	if (age >= 25) 
+	    message = "25 years or older.";
+	else
+	    message = "Younger than 25.";
+	    otherMessage = "More text..."; // LINE A
+	It should also be noted that when there is an else-if and/or else block, having multiple statements, without braces, in anything but the last block is illegal.
+	
+	For example, the following example is illegal:
+	
+	if (age >= 25) 
+	    message = "25 years or older.";
+	    otherMessage = "More text..."; // ILLEGAL
+	else if (age >= 20) 
+	    message = "Between 20 years and 24 years old";
+	    otherMessage = "More text..."; // ILLEGAL
+	else
+	    message = "Younger than 20.";
+	    otherMessage = "More text..."; // LEGAL
+	Bottom line... USE YOUR BRACES! 
+
+
+SWICTH STATEMENT- 
+	int day = 4;
+		switch (day) {
+		  case 1:
+		    System.out.println("Monday");
+		    break;
+		  case 2:
+		    System.out.println("Tuesday");
+		    break;
+		  case 3:
+		    System.out.println("Wednesday");
+		    break;
+		  case 4:
+		    System.out.println("Thursday");
+		    break;
+		  case 5:
+		    System.out.println("Friday");
+		    break;
+		  case 6:
+		    System.out.println("Saturday");
+		    break;
+		  case 7:
+		    System.out.println("Sunday");
+		    break;
+		}
+		// Outputs "Thursday" (day 4)
+
+	switch can hold fairly limited types of value ie int or those that can be converted to int implicitly
+	int, byte,short,char,string(from java 7)
+
+		eg.
+		char c = 'A';
+				switch (c) {
+				  case 'A':
+				    System.out.println("A");
+				    break;
+				  case 'B':
+				    System.out.println("B");
+				    break;
+				  default:
+				    System.out.println("C");
+
+
+	More on Switch
+	Break vs. Return
+	In the "Introduction to Objects" section, I mentioned that it's OK to declare an empty return statement when a method returns void.  As a reminder, the following is odd (not really something you'd see in the "real world"), but legal:
+	
+	public void doSomething() {
+	return;
+	}
+	Now that you've been introduced to conditional statements, you can see some "real world" example of how this might be used.  In these examples, if a condition is true, we don't want to do any additional processing so we return out of the method.  This is different than "break," which would only cause us to break out of a loop or switch statement (rather than the entire method). I will say, however, I'm not a big fan of having return statements in the middle of a method... Having multiple exit points can lead to hard to read, if not buggy, code.
+	
+	In any case, here are some legal examples of returning when the method's return type is void.
+	
+	public void doSomething() {
+	if( isTrue ) {
+	    return; // Exits the entire method
+	}  else {
+	    // Do some work...
+	}
+	//  Do some work if we didn't already return out of the method...
+	}
+	and...
+	
+	public void doSomething() {
+	  switch (someVariable) {
+	    case 0: {
+	      return; // exits the entire method
+	    }
+	    case 1: {
+	      // Do some work...
+	      break; // exits the switch
+	    }
+	    case 2: {
+	      // Do some work...
+	      break; // exits the switch
+	    }
+	  }
+	// If we didn't return out of the method 
+	// do some more work...
+	}
+	Variable Scope
+	Just like if / else if / else statements, any variables declared inside of a case are local to that code block.
+	
+	switch (someVariable) {
+	  case 0: {
+	  String msg = "Hello!"; // Declaration (rather than reference)
+	  break;
+	  }
+	}
+	System.out.println(msg); // ILLEGAL
+	So make sure any variables you want to reference outside of the switch were also declared outside of the switch:
+	
+	String msg = null; // Declaration
+	switch (someVariable) {
+	  case 0: {
+	  msg = "Hello!"; // Reference
+	  break;
+	  }
+	}
+	System.out.println(msg); // Legal
+	Switch Content
+	One final note: the only legal members of a switch statement are "case" and "default" statements.  For example, you can't have variables declared:
+	
+	switch (someVariable) {
+	  String msg = "Hello"; // ILLEGAL
+	  case 0: {
+	  msg = "Hello!";
+	  break;
+	  }
+	  default: {
+	  msg = "Hey!";
+	  break;
+	  }
+	}
+ 
+
+		
+
 
 INHERITANCE-
 	The process by which one class acquires the properties(data members) and functionalities(methods) of another class is called inheritance. 
