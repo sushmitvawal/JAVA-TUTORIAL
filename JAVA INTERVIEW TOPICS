@@ -754,77 +754,188 @@ SWICTH STATEMENT-
 
 JAVA OPERATORS-
 
-15	()		Parentheses
-	[]		Array subscript
-	·		Member selection		Left to Right	
-			
+	15	()		Parentheses
+		[]		Array subscript
+		·		Member selection		Left to Right	
 				
-14	++		Unary post-increment
-	--		Unary post-decrement		Right to left
+					
+	14	++		Unary post-increment
+		--		Unary post-decrement		Right to left
+	
+	
+									
+	13	++		Unary pre-increment
+		--		Unary pre-decrement
+		+		Unary plus
+		-		Unary minus
+		!		Unary logical negation
+		~		Unary bitwise complement
+		(type)		Unary type cast			Right to left
+	
+	
+	12	*		Multiplication
+		/		Division
+		%		Modulus				Left to right
+	
+	
+	11	+		Addition
+		-		Subtraction			Left to right
+	
+	
+	10	<<		Bitwise left shift
+		>>		Bitwise right shift 
+				with sign extension
+		>>>		Bitwise right shift 
+				with zero extension		Left to right
+	
+	
+	9	<		Relational less than
+		<=		Relational less than or equal
+		>		Relational greater than
+		>=		Relational greater than or equal
+		instanceof	Type comparison 
+				(objects only)			Left to right
+	
+	8	==		Relational is equal to
+		!=		Relational is not equal to	Left to right
+	
+		
+	7	&		Bitwise AND			Left to right
+	
+	6	^		Bitwise exclusive OR		Left to right
+	
+	5	|		Bitwise inclusive OR		Left to right
+	
+	4	&&		Logical AND			Left to right
+	
+	3	||		Logical OR			Left to right
+	
+	2	? :		Ternary conditional		Right to left
+	
+	1	=		Assignment
+		+=		Addition assignment
+		-=		Subtraction assignment
+		*=		Multiplication assignment
+		/=		Division assignment
+		%=		Modulus assignment		Right to left
 
 
-								
-13	++		Unary pre-increment
-	--		Unary pre-decrement
-	+		Unary plus
-	-		Unary minus
-	!		Unary logical negation
-	~		Unary bitwise complement
-	(type)		Unary type cast			Right to left
+
+	NOTE: (Inside the if statement)
+		& <-- verifies both operands
+		&& <-- stops evaluating if the first operand evaluates to false since the result will be false
+
+		exprA | exprB <-- this means evaluate exprA then evaluate exprB then do the |.
+		exprA || exprB <-- this means evaluate exprA and only if this is false then evaluate exprB and do the ||.
+
+	Shifts:
+	Refer: https://www.javatpoint.com/operator-shifting
+
+	Post increment-	
+	int y=0;
+	sysout(y++) //0 (y++ ---> old value=0, new value=1, returns=old value)
 
 
-12	*		Multiplication
-	/		Division
-	%		Modulus				Left to right
-
-
-11	+		Addition
-	-		Subtraction			Left to right
-
-
-10	<<		Bitwise left shift
-	>>		Bitwise right shift 
-			with sign extension
-	>>>		Bitwise right shift 
-			with zero extension		Left to right
-
-
-9	<		Relational less than
-	<=		Relational less than or equal
-	>		Relational greater than
-	>=		Relational greater than or equal
-	instanceof	Type comparison 
-			(objects only)			Left to right
-
-8	==		Relational is equal to
-	!=		Relational is not equal to	Left to right
+	int y=0;
+	y++;
+	sysout(y) //1 (y++ ---> old value=0, new value=1, returns=old value but that old value is not used anywhere nor assigned to any var)
 
 	
-7	&		Bitwise AND			Left to right
-
-6	^		Bitwise exclusive OR		Left to right
-
-5	|		Bitwise inclusive OR		Left to right
-
-4	&&		Logical AND			Left to right
-
-3	||		Logical OR			Left to right
-
-2	? :		Ternary conditional		Right to left
-
-1	=		Assignment
-	+=		Addition assignment
-	-=		Subtraction assignment
-	*=		Multiplication assignment
-	/=		Division assignment
-	%=		Modulus assignment		Right to left
+	int y=0;
+	y=y++;
+	sysout(y) //1 (y++ ---> old value=0, new value=1, returns=old value but that old value is assigned to y so y becomes 0 )
 
 
+	More Operator Examples
+	Boolean Operators
+	These operators, which return true or false, were mentioned in the Operators Part 1 lecture, but let's go over a few more examples.  To start, each of the examples will use the following variables:
+	
+	boolean courseInSession = true;
+	int lectureCount = 150;
+	! is the "logical complement" operator.  It allows us to test for a false value:
+	
+	if( !courseInSession ) {
+	System.out.println("Course is not in session.");
+	}
+	 ... or it can flip a true value to false, and a false value to true:
+	
+	courseInSession = !courseInSession;
+	!= is the "not equal to" operator:
+	
+	if( lectureCount != 150 ) {
+	   System.out.println("The lecture count is something other than 150");
+	}
+	The == operator checks for equality:
+	
+	if( lectureCount == 150 ) {
+	   System.out.println("The lecture count is 150");
+	}
+	And the rest check to see if a value is less than (<), less than or equal to (<=), greater than (>), greater than or equal to (>=):
+	
+	if( lectureCount < 10 ) {
+	  System.out.println("Lecture count is less than 10");
+	} else if( lectureCount >= 20 && lectureCount <= 30 ) {
+	  System.out.println("Lecture count is between 20 and 30 [inclusive]");
+	} else if( lectureCount > 100 ) {
+	  System.out.println("Lecture count is 101 or greater.");
+	}
+	
+	
+	Arithmetic Operators
+	+ is add (or concatenation when used with a String), - is subtract, * is multiply, and / is divide. The use of those operators should be obvious. The one arithmetic operator that deserves further discussion is the modulo or remainder operator: %.  This operator returns the remainder of a division operation.  For example:
+	
+	10 % 2 == 0 (10 / 2 == 5 with a remainder of 0)
+	
+	10 % 4 == 2 (10 / 4 == 2 with a remainder of 2)
+	
+	etc.
+	
+	
+	
+	Assignment Operators
+	= is an assignment operator.  It can be used on its own (int x = 30;) or it can be used with arithmetic operations as well:
+	
+	x = x + 5; 
+	
+	is the same thing as:
+	
+	x += 5;
+	
+	Other examples:
+	
+	x -= 5; // Same as x = x - 5;
+	
+	x *= 5; // Same as x = x * 5;
+	
+	X /= 5; // Same as x = x / 5;
+	
+	x %= 5; // Same as x = x % 5;
 
 
+LOOPS-
+	Loops are of 3 types basically
+	for loop, while  loop, do while loop
 
-		
+	while(true){
+	  int z=0;
+	  while(true){
+	    if(z>10)
+	      break;
+	    sysout(z)
+	  }
+	}// this will print 0to9 infinite times
 
+	to end the outer loop we use LABELS
+
+	outer_label:	
+	while(true){
+	  int z=0;
+	  while(true){
+	    if(z>10)
+	      break outer_label;
+	    sysout(z)
+	  }
+	}// this will print 0to9 1 time
 
 INHERITANCE-
 	The process by which one class acquires the properties(data members) and functionalities(methods) of another class is called inheritance. 
