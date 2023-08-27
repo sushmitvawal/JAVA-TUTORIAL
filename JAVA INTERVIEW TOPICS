@@ -1369,6 +1369,16 @@ LAMBDA EXPRESSION-
 
 	If there is only 1 statement in the body , the curly braces, return keyword and semiclono are optional.
 	However, they all eist as a group;either they all appear together or all are omitted
+	percentage -> salary+ (percentage*salary) 
+	cutCheck( percentage -> salary+ (percentage*salary) );
+	Although in the above expression we have kept the parameters same but change it
+	x -> salary+(x*salary) //Legal implementation of the raiseSalary method in payable
+
+	PREDICATE:
+	Java includes a functional interface called "Predicate" to handle very common scenario: a "test" method is invoked with a parameter resulting in a boolean output 
+
+	
+	
 	
 
 
