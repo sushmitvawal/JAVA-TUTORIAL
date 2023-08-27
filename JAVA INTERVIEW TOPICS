@@ -1389,6 +1389,41 @@ LAMBDA EXPRESSION-
 	}
 
 STATIC IMPORTS-
+	We usually define constants as static final in java
+	ALong with abstract, static and default methods, interfaces can also define constants
+	Static import is import constants without important the entire class
+	Eg.
+	public interface SafeDriver {
+	public static final int MAXIMUM_SPEED=55;
+	public static final int SAFE_FOLLOWING_DISTANCE=100;
+	public static final double MINIMUM_FUEL_LEVEL=0.25;
+
+	public static void printMaxSpeed(){
+	  sysout(MAXIMUM_SPEED);//static var can be used inside a static/non-static block but non-static(instance var) cannot be used in static method as static belongs to class and instance var might chnage value for every obj created.
+	}
+	public void drive();
+	public void stop();
+	}
+
+	import static com.sush.SafeDriver.printMaxSpeed;
+	public class Test{
+	psvm(){
+	printMaxSpeed();
+	}
+	}
+
+	we can also do
+	import static com.sush.SafeDriver.*;
+	For wildcard,
+	int speed = MAXIMUM_SPEED; //LEGAL
+	printMaxSpeed(); //LEGAL
+	double distance= SafeDriver.SAFE_FOLLOWING_DISTANCE; //ILLEGAL even if this is the proper way to call static var/methods ie className.varName/className.methodName
+
+	So to make this legal
+	import com.sush.SafeDriver;// remove static from imports and treat it as traditional imports as we do for static/non static methods/classes
+	...
+	double distance= SafeDriver.SAFE_FOLLOWING_DISTANCE;
+
 	
 
 
@@ -1854,200 +1889,232 @@ SYNCRONISATION-
 
 EXCEPTION HANDLING-
 
-The Exception Handling in Java is one of the powerful mechanism to handle the runtime errors so that normal flow of the application can be maintained.
-
-
-
-In Java, an exception is an event that disrupts the normal flow of the program. It is an object which is thrown at runtime.
-
-Suppose there are 10 statements in your program and there occurs an exception at statement 5, the rest of the code will not be executed i.e. statement 6 to 10 will not be executed. If we perform exception handling, the rest of the statement will be executed. That is why we use exception handling in Java.
-
-Exception hierarchy-The topmost class is throwable class.(‘able’=interface for eg cloneable,serializable etc but throwable is a class)
+	The Exception Handling in Java is one of the powerful mechanism to handle the runtime errors so that normal flow of the application can be maintained.
+	In Java, an exception is an event that disrupts the normal flow of the program. It is an object which is thrown at runtime.
+	Suppose there are 10 statements in your program and there occurs an exception at statement 5, the rest of the code will not be executed i.e. statement 6 to 10 will not be executed. If we perform exception handling, the rest of the statement will be executed. That is why we use exception handling in Java.
+	Exception hierarchy-The topmost class is throwable class.(‘able’=interface for eg cloneable,serializable etc but throwable is a class)
                       
-Java Multi-catch block
-A try block can be followed by one or more catch blocks. Each catch block must contain a different exception handler. So, if you have to perform different tasks at the occurrence of different exceptions, use java multi-catch block.
-Points to remember
-oAt a time only one exception occurs and at a time only one catch block is executed.
-oAll catch blocks must be ordered from most specific to most general, i.e. catch for ArithmeticException must come before catch for Exception.
-Java Nested try block
-The try block within a try block is known as nested try block in java.
-Why use nested try block
-Sometimes a situation may arise where a part of a block may cause one error and the entire block itself may cause another error. In such cases, exception handlers have to be nested.
-1.try  
-2.{   statement 1;  
-3.    try  
-4.    {           statement 1;          } catch(Exception e) {}            
-5.}  
-6.catch(Exception e) {}  
-
-Why use java finally
-oFinally block in java can be used to put "cleanup" code such as closing a file, closing connection etc.
-
-Rule: For each try block there can be zero or more catch blocks, but only one finally block.
-
-Note: The finally block will not be executed if program exits(either by calling System.exit() or by causing a fatal error that causes the process to abort).
-
-Java Exception propagation
-An exception is first thrown from the top of the stack and if it is not caught, 
-it drops down the call stack to the previous method,
-If not caught there, the exception again drops down to the previous method, 
-and so on until they are caught or until they reach the very bottom of the call stack.
-This is called exception propagation.
-Rule: By default Unchecked Exceptions are forwarded in calling chain (propagated).
-Rule: By default, Checked Exceptions are not forwarded in calling chain (propagated)
-
-
-
-Any exception that is thrown out of a method must be specified as such by a throws clause.
-The "throws" keyword is used to declare exceptions. It doesn't throw an exception. It specifies that there may occur an exception in the method. It is always used with method signature.
-Java throws keyword
-The Java throws keyword is used to declare an exception. It gives an information to the programmer that there may occur an exception so it is better for the programmer to provide the exception handling code so that normal flow can be maintained.
-Exception Handling is mainly used to handle the checked exceptions. If there occurs any unchecked exception such as NullPointerException, it is programmers fault that he is not performing check up before the code being used.
-Syntax of java throws
-1.return_type method_name() throws exception_class_name{  
-2.//method code  
-3.}  
-
-Which exception should be declared
-Ans) checked exception only, because:
-ounchecked Exception: under your control so correct your code.
-oerror: beyond your control e.g. you are unable to do anything if there occurs VirtualMachineError or StackOverflowError.
-
-Advantage of Java throws keyword
-Now Checked Exception can be propagated (forwarded in call stack).
-It provides information to the caller of the method about the exception.
-Rule: If you are calling a method that declares an exception, you must either caught or declare the exception.
-There are two cases:
-1.Case1:You caught the exception i.e. handle the exception using try/catch.
-2.Case2:You declare the exception i.e. specifying throws with the method.
-
-Case1: You handle the exception
-oIn case you handle the exception, the code will be executed fine whether exception occurs during the program or not.
-
-Case2: You declare the exception
-oA)In case you declare the exception, if exception does not occur, the code will be executed fine.
-oB)In case you declare the exception if exception occures, an exception will be thrown at runtime because throws does not handle the exception.
-o
-
-Difference between throw and throws in Java
-oThere are many differences between throw and throws keywords. A list of differences between throw and throws are given below:
-No.	Throw	throws
-1)	Java throw keyword is used to explicitly throw an exception.	Java throws keyword is used to declare an exception.
-2)	Checked exception cannot be propagated using throw only.	Checked exception can be propagated with throws.
-3)	Throw is followed by an instance.	Throws is followed by class.
-4)	Throw is used within the method.	Throws is used with the method signature.
-5)	You cannot throw multiple exceptions.	You can declare multiple exceptions e.g.
-public void method()throws IOException,SQLException.
-
-Que) Can we rethrow an exception?
-Yes, by throwing same exception in catch block.
-
-Difference between final, finally and finalize
-There are many differences between final, finally and finalize. A list of differences between final, finally and finalize are given below:
-No.	final	Finally	Finalize
-1)	Final is used to apply restrictions on class, method and variable. Final class can't be inherited, final method can't be overridden and final variable value can't be changed.	Finally is used to place important code, it will be executed whether exception is handled or not.	Finalize is used to perform clean up processing just before object is garbage collected.
-2)	Final is a keyword.	Finally is a block.	Finalize is a method.
-
-ExceptionHandling with MethodOverriding in Java
-There are many rules if we talk about methodoverriding with exception handling. 
-The Rules are as follows:
-oIf the superclass method does not declare an exception
-oIf the superclass method does not declare an exception, 
-subclass overridden method cannot declare the checked exception
- but it can declare unchecked exception.
-oIf the superclass method declares an exception
-oIf the superclass method declares an exception, 
-subclass overridden method can declare same, subclass exception or 
-no exception but cannot declare parent exception.
-
-https://www.javatpoint.com/exception-handling-with-method-overriding  ( IMPORTANT!!! )
-https://www.javatpoint.com/custom-exception
-
-
-Difference between Checked and Unchecked Exceptions
-1) Checked Exception
-The classes which directly inherit Throwable class except RuntimeException and Error are known as checked exceptions e.g. IOException, SQLException etc. Checked exceptions are checked at compile-time.
-2) Unchecked Exception
-The classes which inherit RuntimeException are known as unchecked exceptions e.g. ArithmeticException, NullPointerException, ArrayIndexOutOfBoundsException etc. Unchecked exceptions are not checked at compile-time, but they are checked at runtime.
-3) Error
-Error is irrecoverable e.g. OutOfMemoryError, VirtualMachineError, AssertionError etc.
-INNER CLASS-
-
-Difference between nested class and inner class in Java
-There are two types of nested classes non-static and static nested classes.The non-static nested classes are also known as inner classes.
-https://www.javatpoint.com/java-inner-class#nesteddiff (IMPORTANT !!!) ENTIRE TOPIC.
-
-
-GENERICS-
-	A generic type is a generic class or interface that is parameterized over types. 
-NON-GENERIC
-public class Box {
-    private Object object;
-
-    public void set(Object object) { this.object = object; }
-    public Object get() { return object; }
-z	}
-
-GENERIC
-public class Box<T> {
-    // T stands for "Type"
-    private T t;
-
-    public void set(T t) { this.t = t; }
-    public T get() { return t; }
-}
-
-
-We can also pass multiple Type parameters in Generic classes.
-
-class Test<T, U>
-
-Test <String, Integer> obj = 
-            new Test<String, Integer>("GfG", 15);
-
-Generic Functions:
-
-We can also write generic functions that can be called with different types of arguments based on the type of arguments passed to generic method, the compiler handles each method.
-Static and non-static generic methods are allowed, as well as generic class constructors.
- For static generic methods, the type parameter section must appear before the method's return type.
-STATIC - public static <K, V> boolean compare(Pair<K, V> p1, Pair<K, V> p2)
-
-NON STATIC- public <E> void method(E param)
-
-*What is type erasure?
-Generics is implemented using Type erasure, compiler erases all type related information during compile time and no type related information is available during runtime. for example List<String> is represented by only List at runtime.
-
-*What is Bounded and Unbounded wildcards in Generics ?
-
-Bounded Wildcards are those which impose bound on Type. there are two kinds of Bounded wildcards <? extends T> which impose an upper bound by ensuring that type must be sub class of T and <? super T> where its imposing lower bound by ensuring Type must be super class of T. This Generic Type must be instantiated with Type within bound otherwise it will result in compilation error. On the other hand <?> represent and unbounded type because <?> can be replace with any Type.
-
-NORMAL WAY-public static void printList(List<Object> list)
-UNBOUNDED-public static void printList(List<?> list)
-
-. How to write a generic method which accepts generic argument and return Generic Type?
-
-public V put(K key, V value) {
-        return cache.put(key, value);
-}
-
-
-Can we use generics with array?
-NO
-
-Q9. What Is a Wildcard Type?
-A wildcard type represents an unknown type. It's detonated with a question mark as follows:
-public static void consumeListOfWildcardType(List<?> list)
-Here, we are specifying a list which could be of any type. We could pass a list of anything into this method.
-Q10. What Is an Upper Bounded Wildcard?
-An upper bounded wildcard is when a wildcard type inherits from a concrete type. This is particularly useful when working with collections and inheritance.
-
-Q11. What Is an Unbounded Wildcard?
-An unbounded wildcard is a wildcard with no upper or lower bound, that can represent any type.
-What Is a Lower Bounded Wildcard?
-A lower bounded wildcard is when instead of providing an upper bound, we provide a lower bound by using the super keyword. In other words, a lower bounded wildcard means we are forcing the type to be a superclass of our bounded type. Let's try this with an example:
-	public static void addDogs(List<? super Animal> list) {
-	list.add(new Dog("tom"))
+	Java Multi-catch block
+	A try block can be followed by one or more catch blocks. Each catch block must contain a different exception handler. So, if you have to perform different tasks at the occurrence of different exceptions, use java multi-catch block.
+	Points to remember
+	At a time only one exception occurs and at a time only one catch block is executed.
+	All catch blocks must be ordered from most specific to most general, i.e. catch for ArithmeticException must come before catch for Exception else will get a compiler error
+	As of JAVA 7, if the code in the 2 catch blocks is same we can merge it using 'or' operator ie you can use multi-catch statement
+	try{
+	...
+	}catch(StringIndexOutOfBound | NullPointerException e)
+	{
+		sysout("You have a string problem");
 	}
+
+	Java Nested try block
+	The try block within a try block is known as nested try block in java.
+	Why use nested try block
+	Sometimes a situation may arise where a part of a block may cause one error and the entire block itself may cause another error. 
+	In such cases, exception handlers have to be nested.
+	1.try  
+	2.{   statement 1;  
+	3.    try  
+	4.    {           statement 1;          } catch(Exception e) {}            
+	5.}  
+	6.catch(Exception e) {}  
+
+	Why use java finally
+	Finally block in java can be used to put "cleanup" code such as closing a file, closing connection etc.
+	Rule: For each try block there can be zero or more catch blocks, but only one finally block.
+	Note: The finally block will not be executed if program exits(either by calling System.exit() or by causing a fatal error that causes the process to abort).
+	Finally block itself can have a try catch block (for eg to check if file is closed or db conn is closed or not)
+	Combinations allowed:
+	try-catch-finally
+	try-catch
+	try-finally
+
+	Methods from the throwable obj
+	e.getCausse()
+	e.getMessage()
+	e.getStackTrace()
+	e.printStackTrace()
+
+
+	Java Exception propagation
+	An exception is first thrown from the top of the stack and if it is not caught, 
+	it drops down the call stack to the previous method,
+	If not caught there, the exception again drops down to the previous method, 
+	and so on until they are caught or until they reach the very bottom of the call stack.
+	This is called exception propagation.
+	Rule: By default Unchecked Exceptions are forwarded in calling chain (propagated).
+	Rule: By default, Checked Exceptions are not forwarded in calling chain (propagated)
+
+
+
+	Any exception that is thrown out of a method must be specified as such by a throws clause.
+	Even main can throw an exception because its LEGAL but as it is the frontdoor of our application, it's not really a good idea
+	The "throws" keyword is used to declare exceptions. It doesn't throw an exception. It specifies that there may occur an exception in the method. 
+	It is always used with method signature.
+	Java throws keyword
+	The Java throws keyword is used to declare an exception. It gives an information to the programmer that there may occur an exception 
+	so it is better for the programmer to provide the exception handling code so that normal flow can be maintained.
+	Exception Handling is mainly used to handle the checked exceptions. If there occurs any unchecked exception such as NullPointerException, 
+	it is programmers fault that he is not performing check up before the code being used.
+	Syntax of java throws
+	1.return_type method_name() throws exception_class_name{  
+	2.//method code  
+	3.}  
+	
+	Which exception should be declared
+	Ans) checked exception only, because:
+	ounchecked Exception: under your control so correct your code.
+	oerror: beyond your control e.g. you are unable to do anything if there occurs VirtualMachineError or StackOverflowError.
+	
+	Advantage of Java throws keyword
+	Now Checked Exception can be propagated (forwarded in call stack).
+	It provides information to the caller of the method about the exception.
+	Rule: If you are calling a method that declares an exception, you must either caught or declare the exception.
+	There are two cases:
+	1.Case1:You caught the exception i.e. handle the exception using try/catch.
+	2.Case2:You declare the exception i.e. specifying throws with the method.
+	
+	Case1: You handle the exception
+	oIn case you handle the exception, the code will be executed fine whether exception occurs during the program or not.
+	
+	Case2: You declare the exception
+	oA)In case you declare the exception, if exception does not occur, the code will be executed fine.
+	oB)In case you declare the exception if exception occures, an exception will be thrown at runtime because throws does not handle the exception.
+	o
+	
+	Difference between throw and throws in Java
+	oThere are many differences between throw and throws keywords. A list of differences between throw and throws are given below:
+	No.	Throw	throws
+	1)	Java throw keyword is used to explicitly throw an exception.	Java throws keyword is used to declare an exception.
+	2)	Checked exception cannot be propagated using throw only.	Checked exception can be propagated with throws.
+	3)	Throw is followed by an instance.	Throws is followed by class.
+	4)	Throw is used within the method.	Throws is used with the method signature.
+	5)	You cannot throw multiple exceptions.	You can declare multiple exceptions e.g.
+	public void method()throws IOException,SQLException.
+	
+	Que) Can we rethrow an exception?
+	Yes, by throwing same exception in catch block.
+	
+	Difference between final, finally and finalize
+	There are many differences between final, finally and finalize. A list of differences between final, finally and finalize are given below:
+	No.	final	Finally	Finalize
+	1)	Final is used to apply restrictions on class, method and variable. Final class can't be inherited, final method can't be overridden and final variable value can't be changed.	Finally is used to place important code, it will be executed whether exception is handled or not.	Finalize is used to perform clean up processing just before object is garbage collected.
+	2)	Final is a keyword.	Finally is a block.	Finalize is a method.
+	
+	ExceptionHandling with MethodOverriding in Java
+	There are many rules if we talk about methodoverriding with exception handling. 
+	The Rules are as follows:
+	*If the superclass method does not declare an exception*
+	If the superclass method does not declare an exception, 
+	subclass overridden method cannot declare the checked exception
+	 but it can declare unchecked exception.
+	*If the superclass method declares an exception*
+	If the superclass method declares an exception, 
+	subclass overridden method can declare same, subclass exception or 
+	no exception but cannot declare parent exception.
+	
+	https://www.javatpoint.com/exception-handling-with-method-overriding  ( IMPORTANT!!! )
+	https://www.javatpoint.com/custom-exception
+	
+	
+	Difference between Checked and Unchecked Exceptions
+	1) Checked Exception
+	The classes which directly inherit Throwable class except RuntimeException and Error are known as checked exceptions e.g. IOException, SQLException etc. Checked exceptions are checked at compile-time.
+	2) Unchecked Exception
+	The classes which inherit RuntimeException are known as unchecked exceptions e.g. ArithmeticException, NullPointerException, ArrayIndexOutOfBoundsException etc. Unchecked exceptions are not checked at compile-time, but they are checked at runtime.
+	3) Error
+	Error is irrecoverable e.g. OutOfMemoryError, VirtualMachineError, AssertionError etc.
+
+	CREATE YOUR OWN EXCEPTION:
+	public class OverDraftException extends Exception{
+		public OverDraftException(String message){  //constructor
+				super(message);
+		}
+	}
+
+	public void withdraw(double amount) throws OverDraftException{
+	if(balance-amount < 0){
+		throw new OverDraftException("insufficient funds");
+	}
+	}
+
+INNER CLASS-
+	
+	Difference between nested class and inner class in Java
+	There are two types of nested classes non-static and static nested classes.The non-static nested classes are also known as inner classes.
+	https://www.javatpoint.com/java-inner-class#nesteddiff (IMPORTANT !!!) ENTIRE TOPIC.
+	
+	
+	GENERICS-
+		A generic type is a generic class or interface that is parameterized over types. 
+	NON-GENERIC
+	public class Box {
+	    private Object object;
+	
+	    public void set(Object object) { this.object = object; }
+	    public Object get() { return object; }
+	z	}
+	
+	GENERIC
+	public class Box<T> {
+	    // T stands for "Type"
+	    private T t;
+	
+	    public void set(T t) { this.t = t; }
+	    public T get() { return t; }
+	}
+	
+	
+	We can also pass multiple Type parameters in Generic classes.
+	
+	class Test<T, U>
+	
+	Test <String, Integer> obj = 
+	            new Test<String, Integer>("GfG", 15);
+	
+	Generic Functions:
+	
+	We can also write generic functions that can be called with different types of arguments based on the type of arguments passed to generic method, the compiler handles each method.
+	Static and non-static generic methods are allowed, as well as generic class constructors.
+	 For static generic methods, the type parameter section must appear before the method's return type.
+	STATIC - public static <K, V> boolean compare(Pair<K, V> p1, Pair<K, V> p2)
+	
+	NON STATIC- public <E> void method(E param)
+	
+	*What is type erasure?
+	Generics is implemented using Type erasure, compiler erases all type related information during compile time and no type related information is available during runtime. for example List<String> is represented by only List at runtime.
+	
+	*What is Bounded and Unbounded wildcards in Generics ?
+	
+	Bounded Wildcards are those which impose bound on Type. there are two kinds of Bounded wildcards <? extends T> which impose an upper bound by ensuring that type must be sub class of T and <? super T> where its imposing lower bound by ensuring Type must be super class of T. This Generic Type must be instantiated with Type within bound otherwise it will result in compilation error. On the other hand <?> represent and unbounded type because <?> can be replace with any Type.
+	
+	NORMAL WAY-public static void printList(List<Object> list)
+	UNBOUNDED-public static void printList(List<?> list)
+	
+	. How to write a generic method which accepts generic argument and return Generic Type?
+	
+	public V put(K key, V value) {
+	        return cache.put(key, value);
+	}
+	
+	
+	Can we use generics with array?
+	NO
+	
+	Q9. What Is a Wildcard Type?
+	A wildcard type represents an unknown type. It's detonated with a question mark as follows:
+	public static void consumeListOfWildcardType(List<?> list)
+	Here, we are specifying a list which could be of any type. We could pass a list of anything into this method.
+	Q10. What Is an Upper Bounded Wildcard?
+	An upper bounded wildcard is when a wildcard type inherits from a concrete type. This is particularly useful when working with collections and inheritance.
+	
+	Q11. What Is an Unbounded Wildcard?
+	An unbounded wildcard is a wildcard with no upper or lower bound, that can represent any type.
+	What Is a Lower Bounded Wildcard?
+	A lower bounded wildcard is when instead of providing an upper bound, we provide a lower bound by using the super keyword. In other words, a lower bounded wildcard means we are forcing the type to be a superclass of our bounded type. Let's try this with an example:
+		public static void addDogs(List<? super Animal> list) {
+		list.add(new Dog("tom"))
+		}
 
 
 SERIALIZATION AND DE-SERIALIZATION-
