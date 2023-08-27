@@ -1375,7 +1375,22 @@ LAMBDA EXPRESSION-
 	x -> salary+(x*salary) //Legal implementation of the raiseSalary method in payable
 
 	PREDICATE:
-	Java includes a functional interface called "Predicate" to handle very common scenario: a "test" method is invoked with a parameter resulting in a boolean output 
+	Java includes a functional interface called "Predicate" to handle very common scenario: a "test" method is invoked with a parameter resulting in a boolean output.
+	From my understanding predicate is just a lambda expression wi=hich is going to return a boolean value
+	// Java program to illustrate Simple Predicate
+
+	import java.util.function.Predicate;
+	public class PredicateInterfaceExample1 {
+		public static void main(String[] args)
+		{
+			Predicate<Integer> p = i -> (i < 18);
+			System.out.println(p.test(10));
+		}
+	}
+
+STATIC IMPORTS-
+	
+
 
 	
 	
