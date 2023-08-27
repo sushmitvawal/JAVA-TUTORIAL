@@ -371,10 +371,10 @@ QUICK RECAP-
 	Which means we can have overloaded constructor in our class but we can’t override a constructor.
 	Constructors can not be inherited.
 	
-	Interfaces do not have constructors.
+	s do not have constructors.
 	
 	Abstract class can have constructor and it gets invoked when a class, 
-	which implements interface, is instantiated. (i.e. object creation of concrete class).
+	which implements , is instantiated. (i.e. object creation of concrete class).
 	
 	A constructor can also invoke another constructor of the same class – By using this(). 
 	If you want to invoke a parameterized constructor then do it like this: this(parameter list).	
@@ -433,7 +433,7 @@ STATIC METHOD-
 	No obj creation.Can be accessed using class name. /both are same but the obj ref will give you a warning and also not a good habit to use.
 	A static method can access static data member and can change the value of it.
 	Static method can be overloaded but cannot override
-	Interface can have static methods	
+	 can have static methods	
 	we can call super class static method in sub class but it can't override in sub class.
 	Use?
 	1. to update/fetch the class var data.
@@ -1023,7 +1023,7 @@ ABSTRACTION-
 	There are two ways in java we can achieve abstraction:
 
 	By using abstract class (0 to 100%).
-	By using interface (100%).
+	By using  (100%).
 	 
 
 ABSTRACT METHOD-
@@ -1072,7 +1072,79 @@ INTERFACE-
 	Yes, unlike classes, an interface can extend more than one interface in Java. 
 	There are several example of this behavior in JDK itself
 	e.g. java.util.List interface extends both Collection and Iterable interface to tell that it is a Collection as well as it allows iteration via Iterator.
+	Interface can only contain methods that are public and are on and only one of the following: abstract, default and static
+	If you don't add public modifier,it is added implicitly
+	Also if neither abstract,defult or static is set, it is by default static
+	in addition, interfaces can only have var that are public, static and final. they are implied so no need to add explicitly
+	The class that implements the interface should define all the methods of the interface else will get compilation error
+	If the class that implements the interface is a abstract class itself it may/may not define the methods of the interface 
+	but the next class which extends this abstract class has to define all abstract as well as interface methods
+	interface extends interfance class implements interface and we can implement any number of interfaces unlike class extends only 1 class
+
+	In an interface we can define a method(JAVA8) by using a default/static keyword
+	USING DEFAULT
+	public default void  draw(){
+	    ...
+	}
+	public class Rect implements Drawable{
+		public void tesDraw(){
+		    draw(); //LEGAL
+		}	
+	 }
+
+	USING STATIC (will follow all the rules of a static method. concrete classes do not inherit static methods like they do default methods. All static methods calls must be done through interface itself)
+	public interface Drwabable{
+	public static void  draw(){
+	    ...
+	}
+	}
+	public class Rect implements Drawable{
+		public void tesDraw(){
+		    draw(); //ILLEGAL
+		    Rect.draw(); //ILLEGAL
+		    Drawable.draw(); //LEGAL
+		}	
+	 }
+	Methods with default modifier should only appear in interafaces. They are not legal in abstract or concrete classes
+	WHY JAVA8 introduced this update?
+	It gives us an opportunity to introduce new methods, without breaking  classes that are already implementing the interface 
+
+	Drawback of default implemenetation
+	It does not have any acess to the instance variable and that is because it's a method that has access to only what's available inside the interface
+
+	While an IDE or a compiler will complain if you make this mistake, you won't have these tools when taking the exam.  So remember: all interface methods are public, even if they don't use the public keyword.
+	Therefore given the following legal interface:
 	
+	public interface Payable {
+	    double pay();
+	}
+	Unlike interface methods, concrete implementations MUST include the public modifier.  Therefore, the following code will not compile because pay() is missing the "public" modifier. 
+	
+	public class Consultant implements Payable {
+	    double pay() {
+	        return 80_000.0;
+	    }
+	}
+	The correct code is:	
+	public class Consultant implements Payable {
+	    public double pay() {
+	        return 80_000.0;
+	    }
+	}
+
+	Interface that does not contain any method is known as Marker interface
+	eg. public interface Serializable {
+	}
+	USE: A marker interface is typically used by the JRE to determine an obj adheres to some rule or is able to perform some action etc
+	for eg. the class that implements java.io.Serializable informs the JRE that obj of this type may be serialized(a term that means the obj's state maybe turned into a byte array which could be saved as a file, passed over network etc)
+
+	Interface that contains one and only one abstract method is known as Functional interface	
+	eg. public interface Payable {
+	double raiseSalary(double percentage);
+	}
+	Even if the interface contains multiple static or default methods, it is sstill considered 'functional' if it is limited to 1 abstract method
+	NOTE: 	The single exception to the "only one abstract method" rule is if the additional abstract methods are overriding ones declared in java.lang.Object
+
 FINAL-
 	In Java, all non-static methods are by default virtual functions. 
 	Methods that are marked with the keyword final are non-virtual.
@@ -1240,462 +1312,519 @@ POJO-
 	
 	Can a POJO class extend another class or implement interfaces?**
 	    Answer:** Yes, a POJO class can extend another class and implement interfaces. However, you should ensure that the class remains simple and doesn't become tightly coupled with complex inheritance hierarchies.
+
+
+
+LAMBDA EXPRESSION-
+	A lambda expression is a syntax used to pass a block of code into a method that accepts a functional interface parameter
+	Rather than creating an entire classthat implements the functional interface, the developer is able to simply pass in an implementation of the interface's sole method
+	TRADITIONAL WAY:
+	public interface Payable {
+	    double raiseSalary(double percentage);
+	}
+ 	//cutCheck methods accepts Payable as a parameter
+	public void cutCheck(Payable p)
+	{
+	  double updatedSalary=p.reaiseSalary(.04);
+	}
+	//A consultant class implements Payable interface
+	public class Consultant implements Payable
+	{
+		private double salary=80_000.00;
+		public double raiseSalary(double percentage)
+		{
+			return salary+(salary*percentgae);
+		}
+	}
+	// then cutCheck is passed a Consultant instance as a Payable argument
+	Consultant uxEngineer= new Consultant();
+	cutcheck(uxEngineer);
+
+	In order to make a new raiseSalary implementation, we'll need to create a new class to define it again
+	lambda expression allows us to pass in  the funtional interface method implementation , without the need to create an entire class of it.
+
+	USING LAMBDA:
+	double salary=80_000;
+	cutCheck( (double percentage) -> {	return salary+ (percentage*salary);	} );
+	Here,
+	(double percentage) = Method parameters
+	-> = Seperator
+	{	return salary+ (percentage*salary)	} = Method Body
+	
+
+	For multiple parameters
+	(String a, String b, String c)-> {	return a+b+c;	}
+	for no parameter
+	()-> {	return "Hello";	}
+
+
+	LETS SIMPLIFY THIS
+	(double percentage) -> {	return salary+ (percentage*salary);	} 
+
+	They parameter type is optional
+	(percentage) -> {	return salary+ (percentage*salary);	} 
+
+	If there is only 1 parameter, and the parameter type has been omitted, the paranthhesis that surround the parameter is optional
+	percentage -> {	return salary+ (percentage*salary);	} 
+
+	If there is only 1 statement in the body , the curly braces, return keyword and semiclono are optional.
+	However, they all eist as a group;either they all appear together or all are omitted
 	
 
 
 MULTITHREADING-
-Multithreading in Java is a process of executing multiple threads simultaneously.
-A thread is a lightweight sub-process, the smallest unit of processing. Multiprocessing and multithreading, both are used to achieve multitasking.
-However, we use multithreading than multiprocessing because threads use a shared memory area. They don't allocate separate memory area so saves memory, and context-switching between the threads takes less time than process.
-    Java Multithreading is mostly used in games, animation, etc.	
+	Multithreading in Java is a process of executing multiple threads simultaneously.
+	A thread is a lightweight sub-process, the smallest unit of processing. Multiprocessing and multithreading, both are used to achieve multitasking.
+	However, we use multithreading than multiprocessing because threads use a shared memory area. They don't allocate separate memory area so saves memory, and context-switching between the threads takes less time than process.
+	    Java Multithreading is mostly used in games, animation, etc.	
+	
+	Multitasking
+	Multitasking is a process of executing multiple tasks simultaneously. We use multitasking to utilize the CPU. Multitasking can be achieved in two ways:
+	oProcess-based Multitasking (Multiprocessing)
+	oThread-based Multitasking (Multithreading)
+	1) Process-based Multitasking (Multiprocessing)
+	oEach process has an address in memory. In other words, each process allocates a separate memory area.
+	oA process is heavyweight.
+	oCost of communication between the process is high.
+	oSwitching from one process to another requires some time for saving and loading registers, memory maps, updating lists, etc.
+	2) Thread-based Multitasking (Multithreading)
+	oThreads share the same address space.
+	oA thread is lightweight.
+	oCost of communication between the thread is low.
+	What is Thread in java
+	A thread is a lightweight subprocess, the smallest unit of processing. It is a separate path of execution.
+	Threads are independent. If there occurs exception in one thread, it doesn't affect other threads. It uses a shared memory area.
+	NOTE: At a time one thread is executed only.
+	Thread class extends Object class and implements Runnable interface.
+	
+	oHow to perform multithreading by anonymous class?
+	opublic class AnonymousThreadTest {
+	o   public static void main(String[] args) {
+	o      new Thread() {
+	o         public void run() {
+	o            for (int i=1; i <= 5; i++) {
+	o               System.out.println("run() method: " + i);
+	o            }
+	o         }
+	o      }.start();
+	o      for (int j=1; j <= 5; j++) {
+	o         System.out.println("main() method: " + j);
+	o      }
+	o   }
+	o}
+	
+	oWhat happens if we start a thread twice?
+	After starting a thread, it can never be started again. If you does so, an IllegalThreadStateException is thrown. In such case, thread will run once but for second time, it will throw exception.
+	
+	o	What happens if we call the run() method instead of start() method?
+	Can we call run() method directly to start a new thread. No, you can not directly call run method to start a thread. You need to call start method to create a new thread. If you call run method directly , it won't create a new thread and it will be in same stack as main
+	oWhat is the purpose of join method?
+	The join() method waits for a thread to die. In other words, it causes the currently running threads to stop executing until the thread it joins with completes its task.
+	
+	oWhat is the shutdown hook?
+	Shutdown Hooks are a special construct that allows developers to plug in a piece of code to be executed when the JVM is shutting down.
+	
+	
+	Life cycle of a Thread (Thread States)
+	A thread can be in one of the five states. According to sun, there is only 4 states in thread life cycle in java new, runnable, non-runnable and terminated. There is no running state.
+	But for better understanding the threads, we are explaining it in the 5 states.
+	The life cycle of the thread in java is controlled by JVM.
+	
+	
+	1) New
+	The thread is in new state if you create an instance of Thread class but before the invocation of start() method.
+	2) Runnable
+	The thread is in runnable state after invocation of start() method, but the thread scheduler has not selected it to be the running thread.
+	3) Running
+	The thread is in running state if the thread scheduler has selected it.
+	4) Non-Runnable (Blocked)
+	This is the state when the thread is still alive, but is currently not eligible to run.
+	5) Terminated
+	A thread is in terminated or dead state when its run() method exits.
+	How to create thread
+	There are two ways to create a thread:
+	1.By extending Thread class
+	2.By implementing Runnable interface.
 
-Multitasking
-Multitasking is a process of executing multiple tasks simultaneously. We use multitasking to utilize the CPU. Multitasking can be achieved in two ways:
-oProcess-based Multitasking (Multiprocessing)
-oThread-based Multitasking (Multithreading)
-1) Process-based Multitasking (Multiprocessing)
-oEach process has an address in memory. In other words, each process allocates a separate memory area.
-oA process is heavyweight.
-oCost of communication between the process is high.
-oSwitching from one process to another requires some time for saving and loading registers, memory maps, updating lists, etc.
-2) Thread-based Multitasking (Multithreading)
-oThreads share the same address space.
-oA thread is lightweight.
-oCost of communication between the thread is low.
-What is Thread in java
-A thread is a lightweight subprocess, the smallest unit of processing. It is a separate path of execution.
-Threads are independent. If there occurs exception in one thread, it doesn't affect other threads. It uses a shared memory area.
-NOTE: At a time one thread is executed only.
-Thread class extends Object class and implements Runnable interface.
-
-oHow to perform multithreading by anonymous class?
-opublic class AnonymousThreadTest {
-o   public static void main(String[] args) {
-o      new Thread() {
-o         public void run() {
-o            for (int i=1; i <= 5; i++) {
-o               System.out.println("run() method: " + i);
-o            }
-o         }
-o      }.start();
-o      for (int j=1; j <= 5; j++) {
-o         System.out.println("main() method: " + j);
-o      }
-o   }
-o}
-
-oWhat happens if we start a thread twice?
-After starting a thread, it can never be started again. If you does so, an IllegalThreadStateException is thrown. In such case, thread will run once but for second time, it will throw exception.
-
-o	What happens if we call the run() method instead of start() method?
-Can we call run() method directly to start a new thread. No, you can not directly call run method to start a thread. You need to call start method to create a new thread. If you call run method directly , it won't create a new thread and it will be in same stack as main
-oWhat is the purpose of join method?
-The join() method waits for a thread to die. In other words, it causes the currently running threads to stop executing until the thread it joins with completes its task.
-
-oWhat is the shutdown hook?
-Shutdown Hooks are a special construct that allows developers to plug in a piece of code to be executed when the JVM is shutting down.
-
-
-Life cycle of a Thread (Thread States)
-A thread can be in one of the five states. According to sun, there is only 4 states in thread life cycle in java new, runnable, non-runnable and terminated. There is no running state.
-But for better understanding the threads, we are explaining it in the 5 states.
-The life cycle of the thread in java is controlled by JVM.
-
-
-1) New
-The thread is in new state if you create an instance of Thread class but before the invocation of start() method.
-2) Runnable
-The thread is in runnable state after invocation of start() method, but the thread scheduler has not selected it to be the running thread.
-3) Running
-The thread is in running state if the thread scheduler has selected it.
-4) Non-Runnable (Blocked)
-This is the state when the thread is still alive, but is currently not eligible to run.
-5) Terminated
-A thread is in terminated or dead state when its run() method exits.
-How to create thread
-There are two ways to create a thread:
-1.By extending Thread class
-2.By implementing Runnable interface.
-
-Thread class:
-Thread class provide constructors and methods to create and perform operations on a thread.Thread class extends Object class and implements Runnable interface.
-Commonly used Constructors of Thread class:
-oThread()
-oThread(String name)
-oThread(Runnable r)
-oThread(Runnable r,String name)
-
-
-Runnable interface:
-The Runnable interface should be implemented by any class whose instances are intended to be executed by a thread. Runnable interface have only one method named run().
-1.public void run(): is used to perform action for a thread.
-
-Starting a thread:
-start() method of Thread class is used to start a newly created thread. It performs following tasks:
-oA new thread starts(with new callstack).
-oThe thread moves from New state to the Runnable state.
-oWhen the thread gets a chance to execute, its target run() method will run.
-
-
-1) Java Thread Example by extending Thread class
-1.class Multi extends Thread{  
-2.public void run(){  
-3.System.out.println("thread is running...");  
-4.}  
-5.public static void main(String args[]){  
-6.Multi t1=new Multi();  
-7.t1.start();  
-8. }  
-9.}  
-Output:thread is running...
-
-2) Java Thread Example by implementing Runnable interface
-1.class Multi3 implements Runnable{  
-2.public void run(){  
-3.System.out.println("thread is running...");  
-4.}  
-5.  
-6.public static void main(String args[]){  
-7.Multi3 m1=new Multi3();  
-8.Thread t1 =new Thread(m1);  
-9.t1.start();  
-10. }  
-11.}  
-Output:thread is running...
-If you are not extending the Thread class,your class object would not be treated as a thread object.So you need to explicitely create Thread class object.We are passing the object of your class that implements Runnable so that your class run() method may execute.
-
-Thread Scheduler in Java
-Thread scheduler in java is the part of the JVM that decides which thread should run.
-	The thread scheduler mainly uses preemptive or time slicing scheduling to schedule the threads.
-
-Difference between preemptive scheduling and time slicing
-Under preemptive scheduling, the highest priority task executes until it enters the waiting or dead states or a higher priority task comes into existence. Under time slicing, a task executes for a predefined slice of time and then reenters the pool of ready tasks. The scheduler then determines which task should execute next, based on priority and other factors.
-Sleep method in java
-The sleep() method of Thread class is used to sleep a thread for the specified amount of time
- Daemon Thread in Java
-Daemon thread in java is a service provider thread that provides services to the user thread. Its life depend on the mercy of user threads i.e. when all the user threads dies, JVM terminates this thread automatically.
-There are many java daemon threads running automatically e.g. gc, finalizer etc.
-It is a low priority thread.
-No.	Method	Description
-1)	public void setDaemon(boolean status)	is used to mark the current thread as daemon thread or user thread.
-2)	public boolean isDaemon()	is used to check that current is daemon.
-Java Thread Pool
-Java Thread pool represents a group of worker threads that are waiting for the job and reuse many times.
-In case of thread pool, a group of fixed size threads are created. A thread from the thread pool is pulled out and assigned a job by the service provider. After completion of the job, thread is contained in the thread pool again.
-
-Multithreading Interview Questions
-1) What is multithreading?
-Multithreading is a process of executing multiple threads simultaneously. Multithreading is used to obtain the multitasking. It consumes less memory and gives the fast and efficient performance. Its main advantages are:
-oThreads share the same address space.
-oThe thread is lightweight.
-oThe cost of communication between the processes is low.
-More details.
-
-2) What is the thread?
-A thread is a lightweight subprocess. It is a separate path of execution because each thread runs in a different stack frame. A process may contain multiple threads. Threads share the process resources, but still, they execute independently.
-More details.
-
-3) Differentiate between process and thread?
-There are the following differences between the process and thread.
-oA Program in the execution is called the process whereas; A thread is a subset of the process
-oProcesses are independent whereas threads are the subset of process.
-oProcess have different address space in memory, while threads contain a shared address space.
-oContext switching is faster between the threads as compared to processes.
-oInter-process communication is slower and expensive than inter-thread communication.
-oAny change in Parent process doesn't affect the child process whereas changes in parent thread can affect the child thread.
-
-
-4) What do you understand by inter-thread communication?
-oThe process of communication between synchronized threads is termed as inter-thread communication.
-oInter-thread communication is used to avoid thread polling in Java.
-oThe thread is paused running in its critical section, and another thread is allowed to enter (or lock) in the same critical section to be executed.
-oIt can be obtained by wait(), notify(), and notifyAll() methods.
-
-5) What is the purpose of wait() method in Java?
-The wait() method is provided by the Object class in Java. This method is used for inter-thread communication in Java. The java.lang.Object.wait() is used to pause the current thread, and wait until another thread does not call the notify() or notifyAll() method. Its syntax is given below.
-public final void wait()
-
-6) Why must wait() method be called from the synchronized block?
-We must call the wait method otherwise it will throw java.lang.IllegalMonitorStateException exception. Moreover, we need wait() method for inter-thread communication with notify() and notifyAll(). Therefore It must be present in the synchronized block for the proper and correct communication.
-
-7) What are the advantages of multithreading?
-Multithreading programming has the following advantages:
-oMultithreading allows an application/program to be always reactive for input, even already running with some background tasks
-oMultithreading allows the faster execution of tasks, as threads execute independently.
-oMultithreading provides better utilization of cache memory as threads share the common memory resources.
-oMultithreading reduces the number of the required server as one server can execute multiple threads at a time.
-
-8) What are the states in the lifecycle of a Thread?
-A thread can have one of the following states during its lifetime:
-1.New: In this state, a Thread class object is created using a new operator, but the thread is not alive. Thread doesn't start until we call the start() method.
-2.Runnable: In this state, the thread is ready to run after calling the start() method. However, the thread is not yet selected by the thread scheduler.
-3.Running: In this state, the thread scheduler picks the thread from the ready state, and the thread is running.
-4.Waiting/Blocked: In this state, a thread is not running but still alive, or it is waiting for the other thread to finish.
-5.Dead/Terminated: A thread is in terminated or dead state when the run() method exits.
-
-
-9) What is the difference between preemptive scheduling and time slicing?
-Under preemptive scheduling, the highest priority task executes until it enters the waiting or dead states or a higher priority task comes into existence. Under time slicing, a task executes for a predefined slice of time and then reenters the pool of ready tasks. The scheduler then determines which task should execute next, based on priority and other factors.
-
-10) What is context switching?
-In Context switching the state of the process (or thread) is stored so that it can be restored and execution can be resumed from the same point later. Context switching enables the multiple processes to share the same CPU.
-
-11) Differentiate between the Thread class and Runnable interface for creating a Thread?
-The Thread can be created by using two ways.
-oBy extending the Thread class
-oBy implementing the Thread class
-However, the primary differences between both the ways are given below:
-oBy extending the Thread class, we cannot extend any other class, as Java does not allow multiple inheritances while implementing the Runnable interface; we can also extend other base class(if required).
-oBy extending the Thread class, each of thread creates the unique object and associates with it while implementing the Runnable interface; multiple threads share the same object
-oThread class provides various inbuilt methods such as getPriority(), isAlive and many more while the Runnable interface provides a single method, i.e., run().
-
-12) What does join() method?
-The join() method waits for a thread to die. In other words, it causes the currently running threads to stop executing until the thread it joins with completes its task. Join method is overloaded in Thread class in the following ways.
-opublic void join()throws InterruptedException
-opublic void join(long milliseconds)throws InterruptedException
-More details.
-
-13) Describe the purpose and working of sleep() method.
-The sleep() method in java is used to block a thread for a particular time, which means it pause the execution of a thread for a specific time. There are two methods of doing so.
-Syntax:
-opublic static void sleep(long milliseconds)throws InterruptedException
-opublic static void sleep(long milliseconds, int nanos)throws InterruptedException
-Working of sleep() method
-When we call the sleep() method, it pauses the execution of the current thread for the given time and gives priority to another thread(if available). Moreover, when the waiting time completed then again previous thread changes its state from waiting to runnable and comes in running state, and the whole process works so on till the execution doesn't complete.
-
-14) What is the difference between wait() and sleep() method?
-wait()	sleep()
-1) The wait() method is defined in Object class.	The sleep() method is defined in Thread class.
-2) The wait() method releases the lock.	The sleep() method doesn't release the lock.
-
-15) Is it possible to start a thread twice?
-No, we cannot restart the thread, as once a thread started and executed, it goes to the Dead state. Therefore, if we try to start a thread twice, it will give a runtimeException "java.lang.IllegalThreadStateException". Consider the following example.
-1.public class Multithread1 extends Thread  
-2.{  
-3.   public void run()  
-4.    {  
-5.      try {  
-6.          System.out.println("thread is executing now........");  
-7.      } catch(Exception e) {  
-8.      }   
-9.    }  
-10.    public static void main (String[] args) {  
-11.        Multithread1 m1= new Multithread1();  
-12.        m1.start();  
-13.        m1.start();  
-14.    }  
-15.}  
-Output
-thread is executing now........
-Exception in thread "main" java.lang.IllegalThreadStateException
-	at java.lang.Thread.start(Thread.java:708)
-	at Multithread1.main(Multithread1.java:13)
-More details.
-
-16) Can we call the run() method instead of start()?
-Yes, calling run() method directly is valid, but it will not work as a thread instead it will work as a normal object. There will not be context-switching between the threads. When we call the start() method, it internally calls the run() method, which creates a new stack for a thread while directly calling the run() will not create a new stack.
-More details.
-
-17) What about the daemon threads?
-The daemon threads are the low priority threads that provide the background support and services to the user threads. Daemon thread gets automatically terminated by the JVM if the program remains with the daemon thread only, and all other user threads are ended/died. There are two methods for daemon thread available in the Thread class:
-opublic void setDaemon(boolean status): It used to mark the thread daemon thread or a user thread.
-opublic boolean isDaemon(): It checks the thread is daemon or not.
-More details.
-
-18)Can we make the user thread as daemon thread if the thread is started?
-No, if you do so, it will throw IllegalThreadStateException. Therefore, we can only create a daemon thread before starting the thread.
-1.class Testdaemon1 extends Thread{    
-2.public void run(){  
-3.          System.out.println("Running thread is daemon...");  
-4.}  
-5.public static void main (String[] args) {  
-6.      Testdaemon1 td= new Testdaemon1();  
-7.      td.start();  
-8.      setDaemon(true);// It will throw the exception: td.   
-9.   }  
-10.}  
-Output
-Running thread is daemon...
-Exception in thread "main" java.lang.IllegalThreadStateException
-at java.lang.Thread.setDaemon(Thread.java:1359)
-at Testdaemon1.main(Testdaemon1.java:8)
-More details.
-
-19)What is shutdown hook?
-The shutdown hook is a thread that is invoked implicitly before JVM shuts down. So we can use it to perform clean up the resource or save the state when JVM shuts down normally or abruptly. We can add shutdown hook by using the following method:
-1.public void addShutdownHook(Thread hook){}    
-2.Runtime r=Runtime.getRuntime();  
-3.r.addShutdownHook(new MyThread());  
-Some important points about shutdown hooks are :
-oShutdown hooks initialized but can only be started when JVM shutdown occurred.
-oShutdown hooks are more reliable than the finalizer() because there are very fewer chances that shutdown hooks not run.
-oThe shutdown hook can be stopped by calling the halt(int) method of Runtime class.
-More details.
-
-20)When should we interrupt a thread?
-We should interrupt a thread when we want to break out the sleep or wait state of a thread. We can interrupt a thread by calling the interrupt() throwing the InterruptedException.
-More details.
-
-21) What is the synchronization?
-Synchronization is the capability to control the access of multiple threads to any shared resource. It is used:
-
-1.To prevent thread interference.
-2.To prevent consistency problem.
-When the multiple threads try to do the same task, there is a possibility of an erroneous result, hence to remove this issue, Java uses the process of synchronization which allows only one thread to be executed at a time. Synchronization can be achieved in three ways:
-oby the synchronized method
-oby synchronized block
-oby static synchronization
-Syntax for synchronized block
-1.synchronized(object reference expression)  
-2.    {  
-3.        //code block  
-4.    }  
-5.      
-More details.
-
-22) What is the purpose of the Synchronized block?
-The Synchronized block can be used to perform synchronization on any specific resource of the method. Only one thread at a time can execute on a particular resource, and all other threads which attempt to enter the synchronized block are blocked.
-oSynchronized block is used to lock an object for any shared resource.
-oThe scope of the synchronized block is limited to the block on which, it is applied. Its scope is smaller than a method.
-More details.
-
-23)Can Java object be locked down for exclusive use by a given thread?
-Yes. You can lock an object by putting it in a "synchronized" block. The locked object is inaccessible to any thread other than the one that explicitly claimed it.
-
-24) What is static synchronization?
-If you make any static method as synchronized, the lock will be on the class not on the object. If we use the synchronized keyword before a method so it will lock the object (one thread can access an object at a time) but if we use static synchronized so it will lock a class (one thread can access a class at a time). More details.
-
-25)What is the difference between notify() and notifyAll()?
-The notify() is used to unblock one waiting thread whereas notifyAll() method is used to unblock all the threads in waiting state.
-
-26)What is the deadlock?
-Deadlock is a situation in which every thread is waiting for a resource which is held by some other waiting thread. In this situation, Neither of the thread executes nor it gets the chance to be executed. Instead, there exists a universal waiting state among all the threads. Deadlock is a very complicated situation which can break our code at runtime.
-More details.
-
-27) How to detect a deadlock condition? How can it be avoided?
-We can detect the deadlock condition by running the code on cmd and collecting the Thread Dump, and if any deadlock is present in the code, then a message will appear on cmd.
-Ways to avoid the deadlock condition in Java:
-oAvoid Nested lock: Nested lock is the common reason for deadlock as deadlock occurs when we provide locks to various threads so we should give one lock to only one thread at some particular time.
-oAvoid unnecessary locks: we must avoid the locks which are not required.
-oUsing thread join: Thread join helps to wait for a thread until another thread doesn't finish its execution so we can avoid deadlock by maximum use of join method.
-
-28) What is Thread Scheduler in java?
-In Java, when we create the threads, they are supervised with the help of a Thread Scheduler, which is the part of JVM. Thread scheduler is only responsible for deciding which thread should be executed. Thread scheduler uses two mechanisms for scheduling the threads: Preemptive and Time Slicing.
-Java thread scheduler also works for deciding the following for a thread:
-oIt selects the priority of the thread.
-oIt determines the waiting time for a thread
-oIt checks the Nature of thread
-
-29) Does each thread have its stack in multithreaded programming?
-Yes, in multithreaded programming every thread maintains its own or separate stack area in memory due to which every thread is independent of each other.
-
-30) How is the safety of a thread achieved?
-If a method or class object can be used by multiple threads at a time without any race condition, then the class is thread-safe. Thread safety is used to make a program safe to use in multithreaded programming. It can be achieved by the following ways:
-oSynchronization
-oUsing Volatile keyword
-oUsing a lock based mechanism
-oUse of atomic wrapper classes
-
-31) What is race-condition?
-A Race condition is a problem which occurs in the multithreaded programming when various threads execute simultaneously accessing a shared resource at the same time. The proper use of synchronization can avoid the Race condition.
-
-32) What is the volatile keyword in java?
-Volatile keyword is used in multithreaded programming to achieve the thread safety, as a change in one volatile variable is visible to all other threads so one variable can be used by one thread at a time.
-
-33) What do you understand by thread pool?
-oJava Thread pool represents a group of worker threads, which are waiting for the task to be allocated.
-oThreads in the thread pool are supervised by the service provider which pulls one thread from the pool and assign a job to it.
-oAfter completion of the given task, thread again came to the thread pool.
-oThe size of the thread pool depends on the total number of threads kept at reserve for execution.
-The advantages of the thread pool are :
-oUsing a thread pool, performance can be enhanced.
-oUsing a thread pool, better system stability can occur.
+	Thread class:
+	Thread class provide constructors and methods to create and perform operations on a thread.Thread class extends Object class and implements Runnable interface.
+	Commonly used Constructors of Thread class:
+	oThread()
+	oThread(String name)
+	oThread(Runnable r)
+	oThread(Runnable r,String name)
+	
+	
+	Runnable interface:
+	The Runnable interface should be implemented by any class whose instances are intended to be executed by a thread. Runnable interface have only one method named run().
+	1.public void run(): is used to perform action for a thread.
+	
+	Starting a thread:
+	start() method of Thread class is used to start a newly created thread. It performs following tasks:
+	oA new thread starts(with new callstack).
+	oThe thread moves from New state to the Runnable state.
+	oWhen the thread gets a chance to execute, its target run() method will run.
+	
+	
+	1) Java Thread Example by extending Thread class
+	1.class Multi extends Thread{  
+	2.public void run(){  
+	3.System.out.println("thread is running...");  
+	4.}  
+	5.public static void main(String args[]){  
+	6.Multi t1=new Multi();  
+	7.t1.start();  
+	8. }  
+	9.}  
+	Output:thread is running...
+	
+	2) Java Thread Example by implementing Runnable interface
+	1.class Multi3 implements Runnable{  
+	2.public void run(){  
+	3.System.out.println("thread is running...");  
+	4.}  
+	5.  
+	6.public static void main(String args[]){  
+	7.Multi3 m1=new Multi3();  
+	8.Thread t1 =new Thread(m1);  
+	9.t1.start();  
+	10. }  
+	11.}  
+	Output:thread is running...
+	If you are not extending the Thread class,your class object would not be treated as a thread object.So you need to explicitely create Thread class object.We are passing the object of your class that implements Runnable so that your class run() method may execute.
+	
+	Thread Scheduler in Java
+	Thread scheduler in java is the part of the JVM that decides which thread should run.
+		The thread scheduler mainly uses preemptive or time slicing scheduling to schedule the threads.
+	
+	Difference between preemptive scheduling and time slicing
+	Under preemptive scheduling, the highest priority task executes until it enters the waiting or dead states or a higher priority task comes into existence. Under time slicing, a task executes for a predefined slice of time and then reenters the pool of ready tasks. The scheduler then determines which task should execute next, based on priority and other factors.
+	Sleep method in java
+	The sleep() method of Thread class is used to sleep a thread for the specified amount of time
+	 Daemon Thread in Java
+	Daemon thread in java is a service provider thread that provides services to the user thread. Its life depend on the mercy of user threads i.e. when all the user threads dies, JVM terminates this thread automatically.
+	There are many java daemon threads running automatically e.g. gc, finalizer etc.
+	It is a low priority thread.
+	No.	Method	Description
+	1)	public void setDaemon(boolean status)	is used to mark the current thread as daemon thread or user thread.
+	2)	public boolean isDaemon()	is used to check that current is daemon.
+	Java Thread Pool
+	Java Thread pool represents a group of worker threads that are waiting for the job and reuse many times.
+	In case of thread pool, a group of fixed size threads are created. A thread from the thread pool is pulled out and assigned a job by the service provider. After completion of the job, thread is contained in the thread pool again.
+	
+	Multithreading Interview Questions
+	1) What is multithreading?
+	Multithreading is a process of executing multiple threads simultaneously. Multithreading is used to obtain the multitasking. It consumes less memory and gives the fast and efficient performance. Its main advantages are:
+	oThreads share the same address space.
+	oThe thread is lightweight.
+	oThe cost of communication between the processes is low.
+	More details.
+	
+	2) What is the thread?
+	A thread is a lightweight subprocess. It is a separate path of execution because each thread runs in a different stack frame. A process may contain multiple threads. Threads share the process resources, but still, they execute independently.
+	More details.
+	
+	3) Differentiate between process and thread?
+	There are the following differences between the process and thread.
+	oA Program in the execution is called the process whereas; A thread is a subset of the process
+	oProcesses are independent whereas threads are the subset of process.
+	oProcess have different address space in memory, while threads contain a shared address space.
+	oContext switching is faster between the threads as compared to processes.
+	oInter-process communication is slower and expensive than inter-thread communication.
+	oAny change in Parent process doesn't affect the child process whereas changes in parent thread can affect the child thread.
+	
+	
+	4) What do you understand by inter-thread communication?
+	oThe process of communication between synchronized threads is termed as inter-thread communication.
+	oInter-thread communication is used to avoid thread polling in Java.
+	oThe thread is paused running in its critical section, and another thread is allowed to enter (or lock) in the same critical section to be executed.
+	oIt can be obtained by wait(), notify(), and notifyAll() methods.
+	
+	5) What is the purpose of wait() method in Java?
+	The wait() method is provided by the Object class in Java. This method is used for inter-thread communication in Java. The java.lang.Object.wait() is used to pause the current thread, and wait until another thread does not call the notify() or notifyAll() method. Its syntax is given below.
+	public final void wait()
+	
+	6) Why must wait() method be called from the synchronized block?
+	We must call the wait method otherwise it will throw java.lang.IllegalMonitorStateException exception. Moreover, we need wait() method for inter-thread communication with notify() and notifyAll(). Therefore It must be present in the synchronized block for the proper and correct communication.
+	
+	7) What are the advantages of multithreading?
+	Multithreading programming has the following advantages:
+	oMultithreading allows an application/program to be always reactive for input, even already running with some background tasks
+	oMultithreading allows the faster execution of tasks, as threads execute independently.
+	oMultithreading provides better utilization of cache memory as threads share the common memory resources.
+	oMultithreading reduces the number of the required server as one server can execute multiple threads at a time.
+	
+	8) What are the states in the lifecycle of a Thread?
+	A thread can have one of the following states during its lifetime:
+	1.New: In this state, a Thread class object is created using a new operator, but the thread is not alive. Thread doesn't start until we call the start() method.
+	2.Runnable: In this state, the thread is ready to run after calling the start() method. However, the thread is not yet selected by the thread scheduler.
+	3.Running: In this state, the thread scheduler picks the thread from the ready state, and the thread is running.
+	4.Waiting/Blocked: In this state, a thread is not running but still alive, or it is waiting for the other thread to finish.
+	5.Dead/Terminated: A thread is in terminated or dead state when the run() method exits.
+	
+	
+	9) What is the difference between preemptive scheduling and time slicing?
+	Under preemptive scheduling, the highest priority task executes until it enters the waiting or dead states or a higher priority task comes into existence. Under time slicing, a task executes for a predefined slice of time and then reenters the pool of ready tasks. The scheduler then determines which task should execute next, based on priority and other factors.
+	
+	10) What is context switching?
+	In Context switching the state of the process (or thread) is stored so that it can be restored and execution can be resumed from the same point later. Context switching enables the multiple processes to share the same CPU.
+	
+	11) Differentiate between the Thread class and Runnable interface for creating a Thread?
+	The Thread can be created by using two ways.
+	oBy extending the Thread class
+	oBy implementing the Thread class
+	However, the primary differences between both the ways are given below:
+	oBy extending the Thread class, we cannot extend any other class, as Java does not allow multiple inheritances while implementing the Runnable interface; we can also extend other base class(if required).
+	oBy extending the Thread class, each of thread creates the unique object and associates with it while implementing the Runnable interface; multiple threads share the same object
+	oThread class provides various inbuilt methods such as getPriority(), isAlive and many more while the Runnable interface provides a single method, i.e., run().
+	
+	12) What does join() method?
+	The join() method waits for a thread to die. In other words, it causes the currently running threads to stop executing until the thread it joins with completes its task. Join method is overloaded in Thread class in the following ways.
+	opublic void join()throws InterruptedException
+	opublic void join(long milliseconds)throws InterruptedException
+	More details.
+	
+	13) Describe the purpose and working of sleep() method.
+	The sleep() method in java is used to block a thread for a particular time, which means it pause the execution of a thread for a specific time. There are two methods of doing so.
+	Syntax:
+	opublic static void sleep(long milliseconds)throws InterruptedException
+	opublic static void sleep(long milliseconds, int nanos)throws InterruptedException
+	Working of sleep() method
+	When we call the sleep() method, it pauses the execution of the current thread for the given time and gives priority to another thread(if available). Moreover, when the waiting time completed then again previous thread changes its state from waiting to runnable and comes in running state, and the whole process works so on till the execution doesn't complete.
+	
+	14) What is the difference between wait() and sleep() method?
+	wait()	sleep()
+	1) The wait() method is defined in Object class.	The sleep() method is defined in Thread class.
+	2) The wait() method releases the lock.	The sleep() method doesn't release the lock.
+	
+	15) Is it possible to start a thread twice?
+	No, we cannot restart the thread, as once a thread started and executed, it goes to the Dead state. Therefore, if we try to start a thread twice, it will give a runtimeException "java.lang.IllegalThreadStateException". Consider the following example.
+	1.public class Multithread1 extends Thread  
+	2.{  
+	3.   public void run()  
+	4.    {  
+	5.      try {  
+	6.          System.out.println("thread is executing now........");  
+	7.      } catch(Exception e) {  
+	8.      }   
+	9.    }  
+	10.    public static void main (String[] args) {  
+	11.        Multithread1 m1= new Multithread1();  
+	12.        m1.start();  
+	13.        m1.start();  
+	14.    }  
+	15.}  
+	Output
+	thread is executing now........
+	Exception in thread "main" java.lang.IllegalThreadStateException
+		at java.lang.Thread.start(Thread.java:708)
+		at Multithread1.main(Multithread1.java:13)
+	More details.
+	
+	16) Can we call the run() method instead of start()?
+	Yes, calling run() method directly is valid, but it will not work as a thread instead it will work as a normal object. There will not be context-switching between the threads. When we call the start() method, it internally calls the run() method, which creates a new stack for a thread while directly calling the run() will not create a new stack.
+	More details.
+	
+	17) What about the daemon threads?
+	The daemon threads are the low priority threads that provide the background support and services to the user threads. Daemon thread gets automatically terminated by the JVM if the program remains with the daemon thread only, and all other user threads are ended/died. There are two methods for daemon thread available in the Thread class:
+	opublic void setDaemon(boolean status): It used to mark the thread daemon thread or a user thread.
+	opublic boolean isDaemon(): It checks the thread is daemon or not.
+	More details.
+	
+	18)Can we make the user thread as daemon thread if the thread is started?
+	No, if you do so, it will throw IllegalThreadStateException. Therefore, we can only create a daemon thread before starting the thread.
+	1.class Testdaemon1 extends Thread{    
+	2.public void run(){  
+	3.          System.out.println("Running thread is daemon...");  
+	4.}  
+	5.public static void main (String[] args) {  
+	6.      Testdaemon1 td= new Testdaemon1();  
+	7.      td.start();  
+	8.      setDaemon(true);// It will throw the exception: td.   
+	9.   }  
+	10.}  
+	Output
+	Running thread is daemon...
+	Exception in thread "main" java.lang.IllegalThreadStateException
+	at java.lang.Thread.setDaemon(Thread.java:1359)
+	at Testdaemon1.main(Testdaemon1.java:8)
+	More details.
+	
+	19)What is shutdown hook?
+	The shutdown hook is a thread that is invoked implicitly before JVM shuts down. So we can use it to perform clean up the resource or save the state when JVM shuts down normally or abruptly. We can add shutdown hook by using the following method:
+	1.public void addShutdownHook(Thread hook){}    
+	2.Runtime r=Runtime.getRuntime();  
+	3.r.addShutdownHook(new MyThread());  
+	Some important points about shutdown hooks are :
+	oShutdown hooks initialized but can only be started when JVM shutdown occurred.
+	oShutdown hooks are more reliable than the finalizer() because there are very fewer chances that shutdown hooks not run.
+	oThe shutdown hook can be stopped by calling the halt(int) method of Runtime class.
+	More details.
+	
+	20)When should we interrupt a thread?
+	We should interrupt a thread when we want to break out the sleep or wait state of a thread. We can interrupt a thread by calling the interrupt() throwing the InterruptedException.
+	More details.
+	
+	21) What is the synchronization?
+	Synchronization is the capability to control the access of multiple threads to any shared resource. It is used:
+	
+	1.To prevent thread interference.
+	2.To prevent consistency problem.
+	When the multiple threads try to do the same task, there is a possibility of an erroneous result, hence to remove this issue, Java uses the process of synchronization which allows only one thread to be executed at a time. Synchronization can be achieved in three ways:
+	oby the synchronized method
+	oby synchronized block
+	oby static synchronization
+	Syntax for synchronized block
+	1.synchronized(object reference expression)  
+	2.    {  
+	3.        //code block  
+	4.    }  
+	5.      
+	More details.
+	
+	22) What is the purpose of the Synchronized block?
+	The Synchronized block can be used to perform synchronization on any specific resource of the method. Only one thread at a time can execute on a particular resource, and all other threads which attempt to enter the synchronized block are blocked.
+	oSynchronized block is used to lock an object for any shared resource.
+	oThe scope of the synchronized block is limited to the block on which, it is applied. Its scope is smaller than a method.
+	More details.
+	
+	23)Can Java object be locked down for exclusive use by a given thread?
+	Yes. You can lock an object by putting it in a "synchronized" block. The locked object is inaccessible to any thread other than the one that explicitly claimed it.
+	
+	24) What is static synchronization?
+	If you make any static method as synchronized, the lock will be on the class not on the object. If we use the synchronized keyword before a method so it will lock the object (one thread can access an object at a time) but if we use static synchronized so it will lock a class (one thread can access a class at a time). More details.
+	
+	25)What is the difference between notify() and notifyAll()?
+	The notify() is used to unblock one waiting thread whereas notifyAll() method is used to unblock all the threads in waiting state.
+	
+	26)What is the deadlock?
+	Deadlock is a situation in which every thread is waiting for a resource which is held by some other waiting thread. In this situation, Neither of the thread executes nor it gets the chance to be executed. Instead, there exists a universal waiting state among all the threads. Deadlock is a very complicated situation which can break our code at runtime.
+	More details.
+	
+	27) How to detect a deadlock condition? How can it be avoided?
+	We can detect the deadlock condition by running the code on cmd and collecting the Thread Dump, and if any deadlock is present in the code, then a message will appear on cmd.
+	Ways to avoid the deadlock condition in Java:
+	oAvoid Nested lock: Nested lock is the common reason for deadlock as deadlock occurs when we provide locks to various threads so we should give one lock to only one thread at some particular time.
+	oAvoid unnecessary locks: we must avoid the locks which are not required.
+	oUsing thread join: Thread join helps to wait for a thread until another thread doesn't finish its execution so we can avoid deadlock by maximum use of join method.
+	
+	28) What is Thread Scheduler in java?
+	In Java, when we create the threads, they are supervised with the help of a Thread Scheduler, which is the part of JVM. Thread scheduler is only responsible for deciding which thread should be executed. Thread scheduler uses two mechanisms for scheduling the threads: Preemptive and Time Slicing.
+	Java thread scheduler also works for deciding the following for a thread:
+	oIt selects the priority of the thread.
+	oIt determines the waiting time for a thread
+	oIt checks the Nature of thread
+	
+	29) Does each thread have its stack in multithreaded programming?
+	Yes, in multithreaded programming every thread maintains its own or separate stack area in memory due to which every thread is independent of each other.
+	
+	30) How is the safety of a thread achieved?
+	If a method or class object can be used by multiple threads at a time without any race condition, then the class is thread-safe. Thread safety is used to make a program safe to use in multithreaded programming. It can be achieved by the following ways:
+	oSynchronization
+	oUsing Volatile keyword
+	oUsing a lock based mechanism
+	oUse of atomic wrapper classes
+	
+	31) What is race-condition?
+	A Race condition is a problem which occurs in the multithreaded programming when various threads execute simultaneously accessing a shared resource at the same time. The proper use of synchronization can avoid the Race condition.
+	
+	32) What is the volatile keyword in java?
+	Volatile keyword is used in multithreaded programming to achieve the thread safety, as a change in one volatile variable is visible to all other threads so one variable can be used by one thread at a time.
+	
+	33) What do you understand by thread pool?
+	oJava Thread pool represents a group of worker threads, which are waiting for the task to be allocated.
+	oThreads in the thread pool are supervised by the service provider which pulls one thread from the pool and assign a job to it.
+	oAfter completion of the given task, thread again came to the thread pool.
+	oThe size of the thread pool depends on the total number of threads kept at reserve for execution.
+	The advantages of the thread pool are :
+	oUsing a thread pool, performance can be enhanced.
+	oUsing a thread pool, better system stability can occur.
 
 SYNCRONISATION-
-Synchronization in Java
-Synchronization in java is the capability to control the access of multiple threads to any shared resource.
-Java Synchronization is better option where we want to allow only one thread to access the shared resource.
-
-Why use Synchronization
-The synchronization is mainly used to
-1.To prevent thread interference.
-2.To prevent consistency problem.
-
-Types of Synchronization
-There are two types of synchronization
-1.Process Synchronization
-2.Thread Synchronization
-Here, we will discuss only thread synchronization.
-
-Thread Synchronization
-There are two types of thread synchronization mutual exclusive and inter-thread communication.
-1.Mutual Exclusive
-1.Synchronized method.
-2.Synchronized block.
-3.static synchronization.
-2.Cooperation (Inter-thread communication in java)
-
-Mutual Exclusive
-Mutual Exclusive helps keep threads from interfering with one another while sharing data. This can be done by three ways in java:
-1.by synchronized method
-2.by synchronized block
-3.by static synchronization
-
-Concept of Lock in Java
-Synchronization is built around an internal entity known as the lock or monitor. Every object has an lock associated with it. By convention, a thread that needs consistent access to an object's fields has to acquire the object's lock before accessing them, and then release the lock when it's done with them.
-From Java 5 the package java.util.concurrent.locks contains several lock implementations.
-Java synchronized method
-If you declare any method as synchronized, it is known as synchronized method.
-Synchronized method is used to lock an object for any shared resource.
-When a thread invokes a synchronized method, it automatically acquires the lock for that object and releases it when the thread completes its task.
-Synchronized Block in Java
-Synchronized block can be used to perform synchronization on any specific resource of the method.
-Suppose you have 50 lines of code in your method, but you want to synchronize only 5 lines, you can use synchronized block.
-If you put all the codes of the method in the synchronized block, it will work same as the synchronized method.
-Points to remember for Synchronized block
-oSynchronized block is used to lock an object for any shared resource.
-oScope of synchronized block is smaller than the method.
-Syntax to use synchronized block
-1.synchronized (object reference expression) {   
-2.  //code block   
-3.}  
-
-
-
-Static Synchronization
-If you make any static method as synchronized, the lock will be on the class not on object.
-
-Deadlock in java
-Deadlock in java is a part of multithreading. Deadlock can occur in a situation when a thread is waiting for an object lock, that is acquired by another thread and second thread is waiting for an object lock that is acquired by first thread. Since, both threads are waiting for each other to release the lock, the condition is called deadlock.
-
-
-next →← prev
-Inter-thread communication in Java
-Inter-thread communication or Co-operation is all about allowing synchronized threads to communicate with each other.
-Cooperation (Inter-thread communication) is a mechanism in which a thread is paused running in its critical section and another thread is allowed to enter (or lock) in the same critical section to be executed.It is implemented by following methods of Object class:
-owait()
-onotify()
-onotifyAll()
-1) wait() method
-Causes current thread to release the lock and wait until either another thread invokes the notify() method or the notifyAll() method for this object, or a specified amount of time has elapsed.
-2) notify() method
-Wakes up a single thread that is waiting on this object's monitor. If any threads are waiting on this object, one of them is chosen to be awakened. The choice is arbitrary and occurs at the discretion of the implementation. Syntax:
-public final void notify()
-
-3) notifyAll() method
-Wakes up all threads that are waiting on this object's monitor. Syntax:
-public final void notifyAll()
-
-The point to point explanation of the above diagram is as follows:
-1.Threads enter to acquire lock.
-2.Lock is acquired by on thread.
-3.Now thread goes to waiting state if you call wait() method on the object. Otherwise it releases the lock and exits.
-4.If you call notify() or notifyAll() method, thread moves to the notified state (runnable state).
-5.Now thread is available to acquire lock.
-6.After completion of the task, thread releases the lock and exits the monitor state of the object.
-
-Why wait(), notify() and notifyAll() methods are defined in Object class not Thread class?
-It is because they are related to lock and object has a lock.
+	Synchronization in Java
+	Synchronization in java is the capability to control the access of multiple threads to any shared resource.
+	Java Synchronization is better option where we want to allow only one thread to access the shared resource.
+	
+	Why use Synchronization
+	The synchronization is mainly used to
+	1.To prevent thread interference.
+	2.To prevent consistency problem.
+	
+	Types of Synchronization
+	There are two types of synchronization
+	1.Process Synchronization
+	2.Thread Synchronization
+	Here, we will discuss only thread synchronization.
+	
+	Thread Synchronization
+	There are two types of thread synchronization mutual exclusive and inter-thread communication.
+	1.Mutual Exclusive
+	1.Synchronized method.
+	2.Synchronized block.
+	3.static synchronization.
+	2.Cooperation (Inter-thread communication in java)
+	
+	Mutual Exclusive
+	Mutual Exclusive helps keep threads from interfering with one another while sharing data. This can be done by three ways in java:
+	1.by synchronized method
+	2.by synchronized block
+	3.by static synchronization
+	
+	Concept of Lock in Java
+	Synchronization is built around an internal entity known as the lock or monitor. Every object has an lock associated with it. By convention, a thread that needs consistent access to an object's fields has to acquire the object's lock before accessing them, and then release the lock when it's done with them.
+	From Java 5 the package java.util.concurrent.locks contains several lock implementations.
+	Java synchronized method
+	If you declare any method as synchronized, it is known as synchronized method.
+	Synchronized method is used to lock an object for any shared resource.
+	When a thread invokes a synchronized method, it automatically acquires the lock for that object and releases it when the thread completes its task.
+	Synchronized Block in Java
+	Synchronized block can be used to perform synchronization on any specific resource of the method.
+	Suppose you have 50 lines of code in your method, but you want to synchronize only 5 lines, you can use synchronized block.
+	If you put all the codes of the method in the synchronized block, it will work same as the synchronized method.
+	Points to remember for Synchronized block
+	oSynchronized block is used to lock an object for any shared resource.
+	oScope of synchronized block is smaller than the method.
+	Syntax to use synchronized block
+	1.synchronized (object reference expression) {   
+	2.  //code block   
+	3.}  
+	
+	
+	
+	Static Synchronization
+	If you make any static method as synchronized, the lock will be on the class not on object.
+	
+	Deadlock in java
+	Deadlock in java is a part of multithreading. Deadlock can occur in a situation when a thread is waiting for an object lock, that is acquired by another thread and second thread is waiting for an object lock that is acquired by first thread. Since, both threads are waiting for each other to release the lock, the condition is called deadlock.
+	
+	
+	next →← prev
+	Inter-thread communication in Java
+	Inter-thread communication or Co-operation is all about allowing synchronized threads to communicate with each other.
+	Cooperation (Inter-thread communication) is a mechanism in which a thread is paused running in its critical section and another thread is allowed to enter (or lock) in the same critical section to be executed.It is implemented by following methods of Object class:
+	owait()
+	onotify()
+	onotifyAll()
+	1) wait() method
+	Causes current thread to release the lock and wait until either another thread invokes the notify() method or the notifyAll() method for this object, or a specified amount of time has elapsed.
+	2) notify() method
+	Wakes up a single thread that is waiting on this object's monitor. If any threads are waiting on this object, one of them is chosen to be awakened. The choice is arbitrary and occurs at the discretion of the implementation. Syntax:
+	public final void notify()
+	
+	3) notifyAll() method
+	Wakes up all threads that are waiting on this object's monitor. Syntax:
+	public final void notifyAll()
+	
+	The point to point explanation of the above diagram is as follows:
+	1.Threads enter to acquire lock.
+	2.Lock is acquired by on thread.
+	3.Now thread goes to waiting state if you call wait() method on the object. Otherwise it releases the lock and exits.
+	4.If you call notify() or notifyAll() method, thread moves to the notified state (runnable state).
+	5.Now thread is available to acquire lock.
+	6.After completion of the task, thread releases the lock and exits the monitor state of the object.
+	
+	Why wait(), notify() and notifyAll() methods are defined in Object class not Thread class?
+	It is because they are related to lock and object has a lock.
 
 
 EXCEPTION HANDLING-
