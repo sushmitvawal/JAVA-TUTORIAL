@@ -123,7 +123,7 @@ PRIMITIVE DATA TYPES-
 	long        0
 	float       0.0f
 	double      0.0d
-	char        '\u0000'
+	char        '\u0000' or empty
 	boolean     false
 	*Default value for String(or any JAVA obj) is null*
 	Everything else in JAVA is an obj
@@ -136,6 +136,23 @@ PRIMITIVE DATA TYPES-
 	2.2 is a double (it is by default double if you use .)
 	2.2F or 2.2f is float
 	2.2D or 2.2d is double(it's okay to skip D or d as 2.2 is anyway double)
+
+	public static void main(String[] args) {
+	float flt = 100.00F; // A - Ok
+	float flt = (float) 1_11.00; // B - Ok
+	Float flt = 100.00; // C - Error - need cast to Float.
+	double y1 = 203.22; float flt = y1; // D - Error - need cast to float.
+	int y2 = 100; float flt = (float) y2 ; // F - Ok
+
+	char c;
+	boolean b;
+	float f;
+	
+	void printAll() {
+	System.out.println("c = "+c);// ' ' ie empty
+	System.out.println("b = "+b);//false
+	System.out.println("f = "+f);//0.0
+	}
 
 	Working with ocatal and hexadecimal integers
 	Any integer starting with 0 is an octal number
@@ -253,8 +270,8 @@ CONSTRUCTOR-
 	
 	A copy constructor is used for copying the values of one object to another object.
 
-		
-
+	You can call a method inside a constructor
+	to call a constructor inside another cons, call it using this keyword and not by using it's name
 		NOTE: INITIALIZATION BLOCK IS CALLED EVEN BEFORE THE CONSTRUCTOR
 	
 
@@ -1271,6 +1288,26 @@ COLLECTION FRAMEWORK-
 	
 	What is the difference between Java collection and Java collections?
 
+
+ARRAYLIST-
+	public static void main(String[] args) {
+	ArrayList<Integer> points = new ArrayList<>();
+	points.add(1);
+	points.add(2);
+	points.add(3);
+	points.add(4);
+	points.add(null);
+	points.remove(1);
+	points.remove(null);
+	System.out.println(points);
+	}
+	
+	List can print null values as well
+	here the op is [1,3,4] because the number 1 is added in the second line of the list, but the list indexes from 0, 
+	so the 1 is in position zero and the removal done in line 7 removes the data in position 1 of the list which is 2. 
+	Remembering that you cannot give the NullPointer exception because lists can print null if it is inserted in one of the positions of the list, 
+	it would only give NullPointer exception if the list was empty
+
 POJO-
 	
 	WHY OVERRIDE METHODS IN POJO:
@@ -2037,6 +2074,20 @@ EXCEPTION HANDLING-
 		throw new OverDraftException("insufficient funds");
 	}
 	}
+	Which three statements are true about exception handling? (Choose three.)
+	A. Only unchecked exceptions can be rethrown. //Both checked and unchecked exceptions can be rethrown in Java.
+	B. All subclasses of the RuntimeException class are not recoverable. //B. RuntimeException and its subclasses are unchecked exceptions, but their recoverability depends on the specific situation and how the program is designed.
+	C. The parameter in a catch block is of Throwable type. //true
+	D. All subclasses of the RuntimeException class must be caught or declared to be thrown.//D. Subclasses of the RuntimeException class are unchecked exceptions. It is not mandatory to handle or declare RuntimeException and its subclasses.
+	E. All subclasses of the RuntimeException class are unchecked exceptions. //true
+	F. All subclasses of the Error class are not recoverable. //true
+
+	Which two statements are true? (Choose two.)
+	A. Error class is unextendable.
+	B. Error class is extendable.
+	C. Error is a RuntimeException.
+	D. Error is an Exception.
+	E. Error is a Throwable.
 
 INNER CLASS-
 	
