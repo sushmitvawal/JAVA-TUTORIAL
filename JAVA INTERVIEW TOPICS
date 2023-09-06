@@ -2431,6 +2431,97 @@ EXCEPTION HANDLING-
 	D. Error is an Exception.
 	E. Error is a Throwable.
 
+
+*>
+What will be the result of compiling and executing Test class?
+package com.udayan.oca;
+public class Test {
+     public static void main(String[] args) {
+         m1(); //Line 3
+     }
+     private static void m1() throws Exception { //Line 6
+         System.out.println("NOT THROWING ANY EXCEPTION"); //Line 7
+     }
+}
+Explanation
+If a method declares to throw Exception or its sub-type other than RuntimeException types, then calling method should follow handle or declare rule. 
+In this case, as method m1() declares to throw Exception, 
+so main method should either declare the same exception or its super type in its throws clause OR m1(); should be surrounded by try-catch block.
+Hence line 3 gives compilation error
+
+*>
+package com.udayan.oca;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+ 
+abstract class Super {
+     public abstract void m1() throws IOException;
+}
+ 
+class Sub extends Super {
+     @Override
+     public void m1() throws IOException {
+         throw new FileNotFoundException();
+     }
+}
+ 
+public class Test {
+     public static void main(String[] args) {
+         Super s = new Sub();
+         try {
+             s.m1();
+         } catch (FileNotFoundException e) {
+             System.out.print("M");
+         } finally {
+             System.out.print("N");
+         }
+     }
+}
+Explanation
+Even though an instance of FileNotFoundException is thrown by method m1() at runtime, but method m1() declares to throw IOException.
+Reference variable s is of Super type and hence for compiler, call to s.m1(); is to method m1() of Super, which throws IOException.
+And as IOException is checked exception hence calling code should handle it.
+As calling code doesn't handle IOException or its super type, so s.m1(); gives compilation error.
+
+
+*>
+public class Test {
+     static {
+         System.out.println(1/0);
+     }
+ 
+     public static void main(String[] args) {
+         System.out.println("HELLO");
+     }
+}
+On execution, does Test class print "HELLO" on to the console?
+Explanation
+To invoke the special main method, JVM loads the class in the memory. At that time, static initializer block is invoked. 
+1/0 throws a RuntimeException and as a result static initializer block throws an instance of java.lang.ExceptionInInitializerError.
+
+*>
+Fill in the blanks for the definition of java.lang.Error class:
+
+public class java.lang.Error extends ________________ {...}
+Explanation 
+An Error is a subclass of Throwable class.
+
+package com.udayan.oca;
+public class Test {
+     public static void main(String[] args) {
+         try {
+             main(args);
+         } catch (Exception ex) {
+             System.out.println("CATCH-");
+         }
+             System.out.println("OUT");
+     }
+}
+Explanation
+main(args) method is invoked recursively without specifying any exit condition, so this code ultimately throws java.lang.StackOverflowError. StackOverflowError is a subclass of Error type and not Exception type, hence it is not handled. Stack trace is printed to the console and program ends abruptly.
+
+
+
 INNER CLASS-
 	
 	Difference between nested class and inner class in Java
